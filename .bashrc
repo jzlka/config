@@ -85,7 +85,7 @@ shopt -s checkwinsize
 #aby crontab mohol spustat X aplikacie
 #xhost local:ja > /dev/null
 
-#export GHI_TOKEN="38ca5969f38ed674c84857411d0a62abb8d1976d"
+
 #eval $(keychain --eval --noask --clear --quiet ~/.ssh/github_rsa)
 #eval $(keychain --eval --quiet --noask ~/.ssh/github_rsa)
 
