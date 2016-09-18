@@ -1,0 +1,115 @@
+#!/bin/sh
+# Author: Jozef Zuzelka
+
+if [ "$1" == "-h" -o "$1" == "--help" ]; then
+    echo Prehrava hudobne subory z priecinku vybrateho po spusteni.
+    echo "Zoradene podla:"
+    echo "-t    casu [default]"
+    echo "-s    velkosti"
+    echo "-r    nahodne"
+    echo "-a    abecedne"
+    exit
+elif [ "$1" == "-t" ]; then    # time
+    CMD="ls -w1 -t"
+elif [ "$1" == "-s" ]; then    # size
+    CMD="ls -w1 -S"
+elif [ "$1" == "-r" ]; then    # random
+    #CMD="ls -w1 | sort -R"     # slow because it computes a hash for each line
+    CMD="ls -w1 | shuf"
+elif [ "$1" == "-a" ]; then    # alphabetical 
+    CMD="ls -w1"
+else
+    CMD="ls -w1 -t"
+fi
+
+printf "Zadajte priecinok [/Volumes/Data/Hudba/mp3]: "
+read DIR
+#if [ -z $DIR ]; then
+#	DIR=/Volumes/Data/Hudba/mp3
+#fi
+cd "${DIR:=/Volumes/Data/Hudba/mp3}" 2>/dev/null
+if [ $? -ne 0 ];then
+    VALID=0
+    while [ $VALID -ne 1 ]; do
+        printf "Neplatny adresar, zadajte znovu:"
+        read DIR
+        cd "${DIR:=/Volumes/Data/Hudba/mp3}" 2>/dev/null
+        if [ $? -eq 0 ];then
+            VALID=1
+        fi
+    done
+fi
+
+printf "Pocet poslednych pesniciek [100]: "
+read COUNT
+if [ -z $COUNT ]; then
+	COUNT=100
+fi
+
+echo
+echo "+-------------------------------------------------------------------------------+"
+echo "  Prehravam poslednych $COUNT piesni z priecinku: '$DIR'                         "
+echo "+-------------------------------------------------------------------------------+"
+echo "* Stlacte:                                                                      *"
+echo "*  'n'    pre dalsiu piesen,                                                    *"
+echo "*  'p'    pre pozastavenie prehravania,                                         *"
+echo "*  'q'    pre ukoncenie.                                                        *"
+echo "*  ^C     pre ukoncenie po aktualnej piesni.                                    *"
+echo "*  't'    pre zrusenie cakania na volbu (v pripade zleho vypoctu).              *"
+echo "*********************************************************************************"
+echo
+
+OLDIFS=$IFS
+IFS=$'\n'
+N=1
+for file in `eval $CMD | head -n $COUNT`
+do 
+	if [ -d $file ]; then
+		continue
+	elif [ "$file" == "${file%.mp3}" -a "$file" == "${file%.mp4}" -a "$file" == "${file%.mpeg}" -a "$file" == "${file%.flv}" -a "$file" == "${file%.avi}" -a "$file" == "${file%.3gp}" -a "$file" == "${file%.aac}" -a "$file" == "${file%.wmv}" -a "$file" == "${file%.mkv}" ]; then
+		#find . -name "*.mp3" -o -name "*.ogg"
+		continue
+	fi
+
+	BITRATE=$(afinfo "$file" | grep -o "bit rate: \d*" | sed "s/bit rate: //g;s/\([[:digit:]]*\)\([[:digit:]][[:digit:]][[:digit:]]\)/\1kb\/s/g")
+	DURATION_SEC=$(afinfo "$file" | grep -o "duration: .*" | grep -o "\d\d*\." | sed s/[^[:digit:]]//g) # | awk '{print $0 / 60}')
+	
+	
+	afplay -q 1 $file &
+	PID=$!
+	echo "$N. $file [$BITRATE, `expr $DURATION_SEC / 60`m`expr $DURATION_SEC % 60`s] ($PID)"
+	#(PID) kvoli tomu ked ukonci s ^C tak ukonci cakanie na volbu, ale afplay stale bezi na pozadi
+
+	Q=
+    WAIT_TIME=`expr $DURATION_SEC + $DURATION_SEC / 10`    # DURATION + 10%
+    START_TIME=`date +%s`
+    
+    while [ "$Q" != "T" ];do
+		Q="T"
+		echo "Cakam ${WAIT_TIME}s na vstup"
+        TMP=`awk 'BEGIN{srand();print int(rand()*(65535-50000))+50000 }'`
+        x=$TMP
+		read -t $WAIT_TIME x
+		if [ "$x" == "n" ]; then
+			kill $PID 2>/dev/null
+		elif [ "$x" == "q" ]; then
+			kill $PID 2>/dev/null
+			exit 0
+		elif [ "$x" == "p" ]; then
+			echo "Prehravanie sa pozastavi po aktualnej piesni."
+            wait $PID 2>/dev/null
+			while [ "$x" != "c" ]; do
+				printf "Zadajte 'c' pre pokracovanie: "
+				read x
+			done
+		elif [ "$x" == "t" -o "$x" == "$TMP" ]; then    #ak cas uplynul
+			wait $PID 2>/dev/null
+        else
+			#nebola platna volba- pokracujeme v cykleni
+            WAIT_TIME=$(($DURATION_SEC-(`date +%s`-$START_TIME)))
+			Q="F"
+		fi
+	done
+	N=`expr $N + 1`
+done
+IFS=$OLDIFS;

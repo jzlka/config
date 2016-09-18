@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ "$1" = "-c" ]; then
+    #sudo openvpn --config /usr/share/openvpn/zilina.ovpn &
+    sudo service openvpn start
+elif [ "$1" = "-d" ]; then
+    sudo service openvpn stop
+else
+    echo "moznosti: vpn -c / vpn -d"
+fi
+

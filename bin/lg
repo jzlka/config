@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$1" = "mount" ]; then
+    jmtpfs /media/lg
+elif [ "$1" = "umount" ]; then
+    sudo fusermount -u /media/lg
+else
+    echo "moznosti: lg mount / lg umount"
+fi
+

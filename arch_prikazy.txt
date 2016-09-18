@@ -1,0 +1,988 @@
+## Jozef Zuzelka
+## Arch, 1.6.2015-18.8.2015
+
+
+## ------------------------ PRIPOJENIE ANDROIDU ---------------------------
+## TODO precistit
+# mtp-detect
+# mtp-connect
+
+# mtpfs -o allow_other /mnt/lg
+# fusermount -u /mnt/lg
+
+
+## -------------------------- PRIPOJENIE ISO ------------------------------
+# sudo mount -o loop x.iso /mnt/tmp
+
+
+## ------------------------ SKUPINY, UZIVATELIA ---------------------------
+## zobrazenie info
+# id [user]
+
+## zobrazenie skupin
+# cat /etc/group
+
+## pridanie uzivatela
+# useradd -m -G (skupiny, do kt. pridat) -s /bin/bash username
+
+## zmazanie uzivatela
+# userdel -r username
+
+## zobrazenie skupin, do ktorych patri
+# groups [user]
+
+## pridanie skupin
+# groupadd [group]
+
+## zmazanie skupiny
+# groupdel [group]
+
+## pridanie uzivatela do skupin
+# gpasswd -a [user] [group]
+
+
+## -------------------------------- VIM -----------------------------------
+## ulozenie s opravneniami spravcu ked nebol spusteny so sudo
+# :w !sudo tee %
+# :browse confirm e
+
+
+## ------------------------------- UNIX -----------------------------------
+# sed 's/pattern//;s/pattern1//' [file]
+
+
+## ----------------------------- JOURNAL -----------------------------------
+# journalctl --disk-usage
+
+## vynutena rotacia
+# systemctl kill --kill-who=main --signal=SIGUSR2 systemd-journald.service
+
+## kontrola poskodenych logov
+# journalctl --verify
+
+## konfig
+# /etc/systemd/journald.conf
+
+
+## ------------------------------ PACMAN ----------------------------------
+## posledne instalovane
+# expac --timefmt=%s '%l\t%n' | sort -n | tail -20
+
+## precistenie systemu
+# pacman -R $(pacman -Qdtq)
+# pacman -Scc
+
+## vsetky instalovane (okrem base a base-devel)
+# expac -HM "%011m\t%-20n\t%10d" $( com -23 <(pacman -Qqen|sort) <(pacman -Qqg base base-devel|sort) ) sort -n
+
+
+## ------------------------------- MAIL -----------------------------------
+# TODO precistit
+mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt
+mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt -a /tmp/file.jpg
+
+
+# echo "this is the body" | mail -s "Subject" username@somedomain.com
+
+# mail username@somedomain.com
+
+# vim test-mail.txt
+## To:username@somedomain.com
+## From:myaccount@gmail.com
+## Subject: Test
+##
+## This is a test mail.
+# mail username@somedomain.com < test-mail.txt
+
+
+## -------------------------------- GIT -----------------------------------
+# git config --global core.editor vim
+# git config --list
+# git help <verb>
+# git <verb> --help
+# man git-<verb>
+
+# git config --global user.email "TheKuko@users.noreply.github.com"
+## git config --global user.email "jozef.zuzelka@gmail.com"
+# git config --global user.name "TheKuko"
+
+ -- Vygenerovanie ssh klucov
+# ssh-keygen -t rsa -b 4096 -C "jozef.zuzelka@gmail.com"
+# eval "$(ssh-agent -s)"
+# ssh-add .ssh/github_rsa
+## skopirovat na github
+# vim .ssh/github_rsa.pub
+
+ -- Pripojenie 
+# ssh -T git@github.com
+# cat .ssh/github_rsa.pub >> .ssh/authorized_keys
+
+ -- vytvorenie repozitara
+# echo "# git" >> README.md
+## vytvorenie noveho repo
+# git init
+## nakolonovanie repa
+# git clone url 
+# git add README.md
+## vytvorenie commitu
+# git commit -m "first commit"
+# git remote add origin git@github.com:TheKuko/git.git
+## pushnutie commitu do branchu
+# git push -u origin master
+## kontrola zmien
+# git status
+## vypis logu
+# git log
+
+
+## -------------------------------- INE -----------------------------------
+## zobrazenie dostupnych fontov
+# pacman -Ss font
+
+## zobrazenie nainstalovanych fontov
+# fc-list
+# ls /usr/share/kbd/consolefonts
+
+## skenovanie siete
+# nmap -sP 192.168.2.1/24   ##pocitace s ESS neukaze
+
+## ikonky na ploche treba- nastavit nautilus alebo pacmanfs aby vykreslovali
+## plochu (vid google)
+## iDesk, wbar
+
+## Prehravanie vlc v konzole
+# vlc -I ncurses /path/to/file[s]
+
+## Jednorazova synch casu
+# ntpd -q
+
+## Volna pamanat
+# free -h
+
+## vim dva subory vedla seba
+# vim -o file1 file2    ##horizontalne
+# vim -O file1 file2    ##vertikalne
+# set scrollbind
+
+## Swap
+# cat /proc/sys/vm/swappiness   ##current swappiness value (0-100)defult=60
+# sysctl vm.swappiness=10       ##temporarily set value
+# vm.swappiness=10 -> /etc/sysctl.d/99-sysctl.conf
+
+## ------------------------------- DISKY ----------------------------------
+## zobrazenie particii
+# lsblk
+
+## zobrazenie uuid particii
+# blkid
+
+## r/w prava k pripojenej ext4 
+# sudo chown username:group /path/to/mountpoint
+
+
+
+
+
+
+## ------------------------- INSTALACIA ARCHU -----------------------------
+-----------------------------================------------------------------
+
+ -- 1. spojazdnenie ethernetu
+## eth0 nemusi byt, zistit s # ip link
+# dhcpcd enp0s25
+## ak wifi tak
+# wifi-menu -o wlp2s0
+
+ -- 2. aktualizujeme systemovy cas
+## dalo mi o hodinu pozadu!
+## timedatectl set-ntp true
+
+ -- 3. particie
+# fdisk -l
+# fdisk /dev/sda
+## zobrazenie oddielov
+# p
+## vymazanie particie
+# d
+## zobrazenie moznych typov particii
+# l
+## zmena typu particie
+# t
+## ulozenie zmien
+# w
+# reboot
+
+ -- 4. zformatovanie disku a vytvorenie swap
+# lsblk
+
+# mkfs.ext4 /dev/sdxX
+# e2label /dev/sdxX Arch
+
+# mkswap /dev/sdxY
+# swaplabel -L Swap /dev/sdxY
+# swapon /dev/sdxY
+
+# mkfs.ntfs /dev/sdxZ
+# ntfslabel /dev/sdxZ Data
+
+ -- 5. pripojenie particie, na ktoru sa bude istalovat arch
+# mount /dev/sdxX /mnt
+
+ -- 6. v /etc/pacman.d/mirrorlist vybrat najblizsi mirror
+
+ -- 7. instalacia zakladneho systemu 
+# pacstrap -i /mnt base base-devel
+
+ -- 8. vygenerovanie fstab
+## -L pre menovky, -U pre UUID
+# genfstab -L -p /mnt >> /mnt/etc/fstab
+## skontrolovat co ulozilo !!
+
+ -- 9. zmena rootu
+# arch-chroot /mnt /bin/bash
+
+ -- 10. nastavenie locale
+## odkomentovat v /etc/locale.gen
+# [FILE] /etc/locale.gen
+# locale-gen
+## odporuca sa en_US.UTF-8 kvoli citatelnosti logov
+# echo "LANG=sk_SK.UTF-8" > /etc/locale.conf
+# export LANG=sk_SK.UTF-8
+
+## nastavenie klavesnice a fontu
+# [FILE] /etc/vconsole.conf
+
+ -- 11. nastavenie casoveho pasma
+## do .profile dat TZ='Europe/Bratislava'; export TZ
+# tzselect
+# ln -s /usr/share/zoneinfo/Europe/Bratislava /etc/localtime
+## ak hadze chybu, ze uz existuje pridat -f
+
+## nastavenie hw hodin
+# hwclock --systohc --utc
+
+ -- 12. nastavenie hostname
+# echo arch_toshiba > /etc/hostname
+## to iste pridat do /etc/hosts 
+# [FILE] /etc/hosts
+## 127.0.0.1 localhost.localhost arch_toshiba a aj pre ::1
+
+ -- 13. nastavenie pripojenia
+# ip link
+## pre stare znacenie ethX, wlanX ,, pridanie suboru, ktory vymaskuje subor v /usr/lib/udev/rules.d
+# touch /etc/udev/rules.d/80-net-setup-link.rules
+
+ -- 14. instalacia pre wifi
+# [PKG] pacman -S iw wpa_supplicant dialog
+
+ -- 15. nastavenie hesla pre roota
+# passwd
+
+ -- 16. instalacia grubu
+## toto neplati pre UEFI, pozriet arch wiki
+# [PKG] pacman -S grub os-prober
+# grub-install --recheck /dev/sda
+## aktualizovat grub
+# grub-mkconfig -o /boot/grub/grub.cfg
+
+ -- 17. vystup z chroot
+# exit
+# umount -R /mnt
+
+ -- 18. restart
+# reboot
+
+
+## -------------------- ZAKLADNA KONFIGURACIA ARCHU --------------------- ##
+-----------------------=============================------------------------
+
+
+# useradd -m -g users -G wheel,video -s /bin/bash archie
+
+# visudo -f /etc/sudoers ## povolit uzivatelov skupiny wheel
+
+# timedatectl  ## skontrolovat!!
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+# sudo systemctl enable dhcpcd@eth0.service 
+
+ -- Fix thunar usb mount
+# pacman -S gvfs gvfs-smb gvim bash-completion
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Instalacia LTS jadra
+# pacman -S linux-lts
+# grub-mkconfig -o /boot/grub/grub.cfg
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Pripajanie particii pri starte systemu
+# blkid > tmp ## a popridavat do fstab
+## pre adresare v /mnt treba chmod 777!
+# chmod 777 /mnt/data
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Pre korektne pripojenie ntfs particii
+# [PKG] pacman -S ntfs-3g ## pre r/w opravnenia pri pripojeni ntfs particie, treba pridane prepinace v /etc/fstab
+## pre zobrazenie v Thunare pridat ,comment=x-gvfs-show do fstab
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+## Pri SSD zmenit CFQ na NOOP I/O scheduler
+# echo noop > /sys/block/sda/queue/scheduler
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Trvala zmena fontu konzoly
+
+## odskusat fonty
+# setfont eurlatgr
+
+## nacitat klavesnicu
+# localectl list-keymaps
+# loadkeys sk-qwerty
+
+# [FILE] /etc/vconsole.conf
+## pridat FONT=lat2-16 # eurlatgr
+## FONT_MAP=8859-2
+## KEYMAP=(nieco z # localectl list-keymaps)
+
+# [FILE] /etc/mkinitcpio.conf 
+## pridat MODULES="radeon"
+
+# mkinitcpio -p linux
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Ovladace na grafiku
+# [FILE] /etc/pacman.conf 
+## odkomentovat multilib
+
+# [PKG] pacman -S mesa mesa-libgl xf86-video-ati opencl-mesa lib32-mesa-libgl mesa-vdpau lib32-mesa-vdpau libva-vdpau-driver libva-mesa-driver
+# [PKG] pacman -S xf86-video-vesa
+# export LIBVA_DRIVER_NAME=vdpau
+
+# [PKG] pacman -S xorg-xrandr arandr
+
+/ TODO
+## [PKG] pacman -S xorg-xinit libva-mesa-driver libvdpau-va-gl lib32-mesa-demos mesa-demos
+# [PKG] yaourt -S radeon-tray
+
+## Pre zobrazovanie grafov nad renderovacimi aplikaciami nastavit premennu GALLIUM_HUD
+## fps -fps
+## cpu -average CPU load
+## cpu0
+## cpu0 + cpu1
+## pre zobrezenie viacerych spustit
+# GALLIUM_HUD="help" glxgears
+
+## nastavenie vykonu grafiky
+## battery balanced performance
+# echo battery > /sys/class/drm/card0/device/power_dpm_state
+## auto low high
+# echo low > /sys/class/drm/card0/device/power_dpm_force_performance_level
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Instalacia yaourt
+# [PKG] sudo pacman -S yajl wget
+# cd /tmp
+# su ja
+# wget https://aur.archlinux.org/cgit/aur.git/snapshot/packaqe-query.tar.gz
+# tar xfz package-guery.tar.gz
+# cd package-query
+# makepkg
+# sudo pacman -U package-query*.pkg.tar.xz
+
+# wget https://aur.archlinux.org/cgit/aur.git/snapshot/yaourt.tar.gz
+# tar xfz yaourt.tar.gz
+# cd yaourt
+# makepkg
+# sudo pacman -U yaourt*.pkg.tar.xz
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Instalacia prostredia
+# [PKG] pacman -S xorg-server xorg-server-utils openbox xfdesktop xscreensaver
+# [FILE] /home/ja/.xscreensaver
+# [FILE] /home/ja/.config/user-dirs.dirs
+## XDG_DESKTOP_DIR="$HOME/desktop"
+
+# [PKG] yaourt -S xss-lock
+# [FILE] /home/ja/.xinit
+## https://wiki.archlinux.org/index.php/XScreenSaver
+
+## z /etc/xdg/openbox/ skopirovat zakladne 3 subory
+# [FILE] /home/ja/.config/openbox/menu.xml
+# [FILE] /home/ja/.config/openbox/rc.xml
+# [FILE] /home/ja/.config/openbox/autostart
+
+# [FILE] /home/ja/.xsession
+
+# cp /etc/X11/xinit/xinitrc /home/ja/.xinitrc
+# [FILE] /home/ja/.xinitrc
+## pridat na koniec exec openbox-session a zakomentovat ostatne exec
+
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Instalacia prihlasovacej obrazovky
+# [PKG] pacman -S slim slim-themes archlinux-themes-slim
+# systemctl enable slim.service
+# [FILE] /etc/slim.conf
+/ TODO
+## upravit panel.png v priecinkoch s temami
+# [FILE] /usr/share/slim/themes
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Priehladnost a tiene
+# [PKG] pacman -S xcompmgr
+## pridat do .xinirc
+# [FILE] /home/ja/.xinitrc
+
+# [FILE] /etc/X11/xorg.conf
+##	Section "Extensions"
+##		Option "Composite" "Enable"
+##	EndSection
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Ovladac touchpadu a konfiguracia
+# [PKG] pacman -S xf86-input-synaptics
+# [FILE] /etc/X11/xorg.conf.d/50-synaptics.conf
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Ovladac zvukovky a unmute
+# [PKG] pacman -S alsa-utils alsa-plugins pulseaudio-alsa pulseaudio lib32-alsa-plugins
+# alsamixer ## tam ist do Maser, stalcit "M" a sipkou hore pridat hlas
+# speaker-test -c2
+# amixer sset Master unmute
+
+## aby skype nezastavoval audio
+# [FILE] /etc/pulse/default.pa
+## #load-module module-role-cork
+## ak nepomoze tak v subore /etc/pulse/daemon.conf
+## flat-volumes = no
+## alebo pactl unload-module module-role-cork
+
+/ TODO
+ -- Nastavenie ekvalizeru (NEFUNGUJE??) ##3 neskusal
+# [PKG] pacman -S pulseaudio-equalizer
+# pactl load-module module-equalizer-sink
+# pactl load-module module-dbus-protocol
+# qpaeq
+## nacitanie ekvalizeru a modulov pri starte
+# [FILE] .config/pulse/default.pa
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Spustenie synch casu
+# [PKG] pacman -S ntp
+# ntpd -u ja:users
+# ntpd -q  ## jednorazova synchronizacia
+# systemctl enable ntpd
+# [FILE] /etc/ntp.conf
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Instalacia panelu uloh a konfiguracia
+# [PKG] pacman -S tint2
+# [FILE] /home/ja/.config/tint2/tint2rc
+# [FILE] /home/ja/.xinitrc
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Presmerovanie boot sprav na tty12
+## https://wiki.archlinux.org/index.php/Systemd#Forward_journald_to_.2Fdev.2Ftty12
+## https://wiki.archlinux.org/index.php/Systemd_FAQ#How_do_I_change_the_default_number_of_gettys.3F
+# [DIR] mkdir /etc/systemd/journald.conf.d
+
+# [FILE] /etc/systemd/journald.conf.d/fw-tty12.conf
+## [Journal]
+## ForwardToConsole=yes
+## TTYPath=/dev/tty12
+## MaxLevelConsole=info
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Hibernovanie pri baterii pod 5%
+# [FILE] /etc/udev/rules.d/99-lowbat.rules
+## suspend the system when battery level drops to 5% or lower
+## SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", ATTR{capacity}=="[0-5]", RUN+="/ust/bin/systemctl hibernate"
+
+# [PKG] pacman -S hdparm
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Aby nemohol hocikto citat logy jadra
+# [FILE] /etc/sysctl.d/50-dmesg-restrict.conf
+## kernel.dmesg_restric = 1
+
+/ TODO
+## net.core.bpf_jit_enable = 0		## nespravil, neviem v akom subore a uz ani naco
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Povolenie mysi v tty
+# [PKG] pacman -S gpm
+# [DIR] mkdir /etc/conf.d
+# [FILE] /etc/conf.d/gpm
+## GPM_ARGS="-m /dev/input/mice -t imps2"
+
+# systemctl start gpm.service
+# systemctl enable gpm.service
+## pre povolenie podpory vo vime -> set mouse=a
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+/ TODO
+//////////////////////////////////////
+ -- Pridanie fontov z ms particie
+# ln -s /mnt/xp/WINDOWS/Fonts /usr/share/fonts/WindowsFonts
+# fc-cache
+## alebo ich skopirovat
+# [DIR] mkdir /usr/share/fonts/WindowsFonts
+# [FILES] cp /mnt/xp/WINDOWS/Fonts /usr/share/fonts/WindowsFonts
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Posielanie mailov
+# [PKG] sudo pacman -S mutt ssmtp smtp-forwarder
+# [FILE] /etc/ssmtp/ssmtp.conf
+# [FILE] /etc/ssmtp/revaliases
+## povolit https://www.google.com/settings/security/lesssecureapps
+
+# [FILE] /home/ja/.muttrc
+# [DIR] mkdir /home/ja/.mutt
+# [FILES] /home/ja/.mutt/
+
+# sudo groupadd mail
+# sudo chown :mail /etc/ssmtp/ssmtp.conf
+# sudo chown :mail /usr/bin/ssmtp
+# sudo chmod 640 /etc/ssmtp/ssmtp.conf
+# sudo chmod g+s /usr/bin/ssmtp
+# sudo gpasswd -a root mail
+# sudo gpasswd -a ja mail
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Instalacia ssh a konfiguracia (journalctl -u sshd)
+# [PKG] pacman -S openssh
+
+# [FILE] /etc/ssh/sshd_config
+## AllowUsers archie
+## PermitRootLogin no
+## Banner /etc/issue
+## Port 39800
+## HostKey /etc/ssh/ssh_host_rsa_key
+## PasswordAuthentication no
+## ChalengeResponseAuthentication no
+
+# systemctl start sshd.service
+# systemctl enable sshd.service
+
+ -- RSA prihlasovanie
+# ssh-keygen -t rsa -b 4096
+## eval "$(ssh-agent -s)" ## neviem ci nieco robilo
+## ssh-add .ssh/id_rsa
+# chmod 700 .ssh/
+# ssh-copy-id ja@localhost ## neviem co robilo
+# cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+
+ -- Zapamatanie si hesla po odhlasenie
+# [PKG] pacman -S keychain
+# [FILE] /home/ja/.bashrc
+## eval $(keychain --eval --quiet --noask --clear ~/.ssh/github_rsa)
+
+ -- Posielanie IP prihlaseneho
+# [FILE] /etc/ssh/sshrc
+
+/ TODO
+ -- fail2ban
+# [PKG] pacman -S python-pyinotify whois fail2ban
+# man capabilities
+# [FILE] /etc/systemd/system/fail2ban.service.d/capabilities.conf
+# [FILE] /etc/fail2ban/jail.local
+# [FILE] /etc/fail2ban/jail.d/sshd.conf
+# [FILE] /etc/fail2ban/jail.d/ssh-repeater.conf
+# [FILE] /etc/fail2ban/jail.d/ssh-iptables.conf
+# [FILE] /etc/fail2ban/action.d/iptables-repeater.conf
+# [FILE] /etc/fail2ban/ip.blocklist.ssh
+
+## zastavenie upozornenia na start a stop fail2ban
+## vykomentovat akcie v suboroch
+# [FILE] /etc/fail2ban/action.d/mail-buffered.conf
+## [FILE] mail.conf
+## [FILE] mail-whois.conf
+# [FILE] mail-whois-lines.conf
+# [FILE] sendmail-buffered.conf
+### [FILE] sendmail.conf
+### [FILE] sendmail-whois.conf
+### [FILE] sendmail-whois-lines.conf
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+-- Posielanie verejnej IP na mail po starte
+# [FILE] /home/ja/bin/ip_mail.sh
+# [FILE] .config/openbox/autostart
+# crontab -e
+## */30 * * * * /home/ja/bin/ip_mail.sh 2>&1 >/dev/null
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- VNC
+# [PKG] pacman -S tigervnc
+# vncpasswd
+## heslo pre pozeranie: heslojeveslo
+# [FILE] /etc/systemd/system/vncserver@:1.service
+# systemctl --system daemon-reload
+# systemctl enable vncserver@:1.service
+# [FILE] ~/.config/systemd/user/vncserver@.service
+## spustit ako normalny uzivatel
+# systemctl --user daemon-reload
+/ TODO
+# systemctl --user enable vncserver@:1
+# systemctl --user start vncserver@:1
+# loginctl enable-linger ja
+
+## pripojenie k fyzickemu monitoru
+# x0vncserver -display :0 -passwordfile ~/.vnc/passwd
+## pripojenie k virtualnemu
+# vncviewer 10.1.10.2:1
+## pripojenie cez localhost
+# vncviewer localhost:1
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+/ TODO
+ -- Xscreensaver a konfig
+# [PKG] pacman -S xscreensaver
+# [PKG] yaourt -S xscreensaver-arch-logo
+## da sa vygenerovat aj s xscreensaver-demo
+# [FILE] ~/.xscreensaver
+
+# [PKG] yaourt -S xss-lock
+# [FILE] /home/ja/.xinit
+
+# https://wiki.archlinux.org/index.php/XScreenSaver
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+/ TODO
+ -- Virtualbox
+# [PKG] pacman -S virtualbox qt4
+# sudo modprobe vboxdrv
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+/ TODO
+ -- upravit klavesnicu (v sprave)
+## TODO
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+/ TODO
+ -- Nastavenie firewallu
+# [PKG] pacman -S iptables
+## TODO nastavit iptables (v sprave)
+
+## https://wiki.archlinux.org/index.php/Grsecurity
+# [PKG] pacman -S linux-grsec
+# [FILE] /etc/modules-load.d/linux-grsec.conf
+# sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# [PKG] pacman -S fwbuilder
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+/ TODO
+## https://wiki.archlinux.org/index.php/GRUB/Tips_and_tricks#Password_protection_of_GRUB_menu
+ -- Zaheslovanie grubu
+# sudo grub-mkpasswd-pbkdf2
+# [FILE] /etc/grub.d/40_custom
+
+## zrychlenie startu a skrytie grubu
+# [FILE] /etc/default/grub
+## GRUB_FORCE_HIDDEN_MENU="true"
+## -- unrestricted
+
+# sudo grub-mkconfig -o /boot/grub/grub.cfg
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Instalacia siete
+# [PKG] pacman -S networkmanager networkmanager-openvpn network-manager-applet xfce4-notifyd gnome-icon-theme gnome-keyring xfce4-cpugraph-plugin
+# nm-applet
+# systemctl start NetworkManager
+# systemctl enable NetworkManager
+
+ -- Pripojenie sa k vpn
+# [PKG] pacman -S openvpn
+# [FILE] /usr/share/openvpn/zilina.ovpn
+# sudo openvpn zilina.ovpn
+
+ -- Promiskuitny mod
+# [FILE] /etc/systemd/system/promiscuous@.service
+## zapnutie promiskuitneho rezimu
+# sudo systemctl enable promiscuous@eth0.service
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Nastavenie web kamery
+# [PKG] pacman -S guvcview
+## TODO nastavit!
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+/ TODO
+ -- Sprava napajania
+# [PKG] pacman -S tlp 	## neinstaloval
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Podpora MTP zariadeni
+# [PKG] pacman -S mtpfs libgphoto2 gvfs-mtp gvfs-gphoto2
+# gpasswd -a ja uucp
+# [FILE] /etc/fuse.conf
+## pridat user_allow_other
+
+# lsusb 
+## najst android a pridat do 
+# [FILE] /etc/udev/rules/51-android.rules
+
+# udevadm control --reload
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Sprava suborov
+# [PKG] pacman -S thunar thunar-volman thunar-media-tags-plugin thunar-archive-plugin
+# [FILE] /home/ja/.config/Thunar/uca.xml
+
+## nahlady suborov
+# pacan -S tumbler libopenraw libgsf poppler-glib ffmpegthumbnailer
+
+## skopirovat subor ~/.config/user-dirs.dirs
+# [FILES] /home/ja/.config/user-dirs.dirs
+
+## skopirovat sablony do /home/ja/templates
+# [FILES] /home/ja/templates
+
+# [PKG] pacman -S xarchiver zip unzip p7zip unarj lzop cpio unrar samba
+
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Menenie pozadia kazdych 10min 
+# [PKG] pacman -S cronie
+# sudo systemctl enable cronie
+# crontab -e
+## */10 * * * * export DISPLAY=:0.0 && /home/ja/bin/ch_wallpaper.sh
+## do .bashrc pridat "xhost local:ja > /dev/null"
+# [FILE] /var/cron/tabs
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+/ TODO
+  -- Tlaciaren
+# [PKG] pacman -S cups gutenprint system-config-printer
+# sudo systemctl enable org.cups.cupsd.service
+# sudo systemctl start org.cups.cupsd.service
+# sudo systemctl enable cups-browsed.service
+# sudo systemctl start cups-browsed.service
+## nastavovanie v http://localhost:631
+## najdenie tlaciarne
+# lpinfo -v
+## pridanie tlaciarne
+# lpadmin -p HP_DESKJET_940C -E -v "usb://HP/DESKJET%20940C?serial=CN16E6C364BH" -P /usr/share/ppd/HP/hp-deskjet_940c.ppd.gz
+# system-config-printer ##meno root a heslo
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+  -- Webovy prehliadac
+# [PKG] pacman -S firefox gst-libav gst-plugins-good flashplugin
+## stiahnut balik https://addons.mozilla.org/en-US/firefox/language-tools/
+## [PKG] yaourt -S aspell-sk
+## v about:config nastavit
+## spellchecker.dictionary na sk-SK
+
+## Na stranke nainstalovat jazyk
+## https://addons.mozilla.org/sk/firefox/language-tools/
+## v about:config zmenit "general.useragent.locale" na sk-SK
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+
+ -- Instalacia Gitu
+# [PKG] pacman -S git
+# [FILES] /home/ja/.git
+
+## pre ulozenie passphrase
+# git-agent bash
+# git-add /home/ja/.ssh/github_rsa
+
+## zobrazenie klucov
+# git-add -l
+
+--==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
+ -- Ostatna konfiguracia 
+# [FILE] /etc/systemd/journald.conf
+# [FILE] /etc/oblogout.conf
+# [FILE] /home/ja/.bashrc
+# [FILE] /home/ja/.config/htop/htoprc
+# [FILE] /home/ja/.vimrc
+# [FILES] /home/ja/.vim/
+# [FILES] /home/ja/.xnviewmp/
+# [FILES] /home/ja/bin/
+# [FILES] /usd/share/fbxkp/
+
+ /TODO
+# [FILES] /home/ja/.themes
+# [FILES] /home/ja/.icons
+
+
+
+
+
+
+### ---------------------- INSTALOVANE PROGRAMY ----------------------- ###
+---------------------------====================----------------------------
+
+# pacman -S kernel26-headers         ## netreba
+
+-- Hlavne
+# pacman -S skype geany geany-plugins terminator evince
+
+-- Text a dokumentacia
+# pacman -S doxygen graphviz texlive-core texlive-latexextra
+# pacman -S gvim libreoffice-fresh libreoffice-fresh-sk
+
+-- Programovanie
+# pacman -S valgrind gdb cppcheck ddd indent dmd
+
+-- Nahravanie obrazovky a praca s audiom
+# pacman -S ffmpeg faac spek
+
+-- Multimedia
+# pacman -S vlc clementine 
+# yaourt -S dupeguru-me xnviewmp npapi-vlc-git
+
+-- Fonty
+# pacman -S ttf-freefont font-mathematica ttf-inconsolata adobe-source-code-pro-fonts artwiz-fonts bdf-unifont cantarell-fonts dina-font ttf-fira-mono ttf-fira-sans ttf-linux-libertine 
+
+-- Editory
+# pacman -S gimp imagemagick inkscape hugin uniconvertor audacity #cinerella
+
+-- Accessories
+# pacman -S expac scrot gksu zenity gmrun time
+# pacman -S lshw lsof iotop iftop tree 
+# pacman -S oblogout gsimplecal fbida w3m ncurses nitrogen htop mc
+# pacman -S libqalculate qalculate-gtk gnuplot
+# pacman -S gparted dosfstools unetbootin bleachbit wine unison octave transmission-gtk baobab
+# yaourt -S grub-customizer fbxkb
+
+-- Xfce4 utility
+# pacman -S xfce4-screenshoter xfce4-power-manager xfce4-volumed
+
+-- Ovladace na zvuk a kodeky
+# pacman -S gstreamer gst-plugins-base gst-plugins-good gstreamer0.10-base-plugins gstreamer0.10-good-plugins gstreamer0.10-ffmpeg 
+# pacman -S pavucontrol
+# yaourt -S pnmixer
+
+-- Vzhlad
+# pacman -S lxappearance lxappearance-obconf gtk2_prefs obconf
+# pacman -S gtk-engines gtk-xfce-engine
+# pacman -S numix-themes-archblue
+# yaourt -S numix-circle-icon-theme-git numix-shine-icon-theme-git numix-themes-archblue-git
+
+-- WiFi
+# pacman -S aircrack-ng
+
+/ TODO
+# pacman -S obmenu
+
+# pacman -S java-runtime-common jdk7-openjdk-7 jre7-openjdk-headless-7 jre7-openjdk-7 java-enviroment-common
+# pacman -S hexchat znc 
+# yaourt -S freenet stellarium-bzr
+
+-- vzhlad
+# pacman -S gtk-xfce-engine gtk-engines gtk-engine-aurora mate-themes mate-themes-extras
+# pacman -S [elementary,tangerine,faience,human]-icon-theme 
+# yaourt -S gtk-theme-murrine-collection awoken-icons 
+## https://launchpad.net/ubuntu/+archive/primary/+files/murrine-themes_0.98.3ubuntu1.tar.gz
+
+-- stahovanie videi
+# sudo wget https://yt-dl.org/latest/youtube-dl -O /usr/local/bin/youtube-dl
+# sudo chmod a+x /usr/local/bin/youtube-dl
+# hash -r
+# sudo youtube-dl -U
+
+-- LightZone
+# yaourt -S lightzone
+## pri instalacii javahelp2 treba v PKGBUILD nahradit zdroj na
+## ftp://ftp.tw.freebsd.org/pub/distfiles/javahelp2_0_05.zip
+
+# pacman -S raw-thumbnailer
+# pacman -S conky
+
+# pacman -S libmp4v2 evince sshfs pm-utils libva x264 socat mc nmap wireshark-gtk
+# yaourt -S libreoffice-fresh-en-us-help
+
+-- gstreamer a kodeky
+# pacman -S phonon-qt4-gstreamer gst-plugins-ugly
+# pacman -S --needed --noconfirm gst-plugins-bad gst-plugins-base gstreamer gstreamer0.10 gstreamer0.10-bad gstreamer0.10-bad-plugins gstreamer0.10-base-plugins gstreamer0.10-ffmpeg gstreamer0.10-good gstreamer0.10-good-plugins gstreamer0.10-python gstreamer0.10-ugly gstreamer0.10-ugly-plugins 
+
+# yaourt -S archey teamviewer gigolo obapps peazip-gtk2 libde265 xfce4-volumed npapi-vlc-git pa-applet-pop-git
+# systemctl enable teamviewerd
+
+rfkill mdk3 reaver macchanger
+gnome-system-monitor
+lib32-portaudio
+
+TODO
+ponastavovat smbpasswd
+spojazdnit vpn
+skopirovat temu zo stareho disku
+
+
+
+
+## INSTALOVAT
+
+#Accessories
+dia
+yumi
+
+#multimedia 
+xfburn
+
+#settings
+dmenu
+
+kmail
+aftershot pro
+hwinfo
+dockaps
+rsync
+com
+faux
+check md5
+fonts
+inssider
+odinstalovat peazip
+yaourt yum
+
+nastavit IPS na automaticke blokovanie ipciek z ssh
+pokracovanie mysi ked pride prst na koniec touchpadu
+crunchbang console font /kali font
+skopirovat z cruchbang /etc/profile.d/bash-completion.sh
+ikony
+kontainery
+equalizer
+/usr/libexec/ld-elf.so.1: Shared object "libXaw3d.so.7" not found
+error: portaudio not found on your system and thus audio functionality is not present
+skopirovat stetce do ~/.gimp-2.8
+
+
+
+https://github.com/bubbl/bubb-confs
+
+
+
+#https://wiki.archlinux.org/index.php/Kernel_modules#Automatic_module_handling
+#/etc/modprobe.d/thinkfan.conf
+# On ThinkPads, this lets the 'thinkfan' daemon control fan speed
+#options thinkpad_acpi fan_control=1
