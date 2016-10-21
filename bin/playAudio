@@ -1,93 +1,33 @@
 #!/bin/sh
 # Author: Jozef Zuzelka
 
-if [ "$1" == "-h" -o "$1" == "--help" ]; then
-    echo Prehrava hudobne subory z priecinku vybrateho po spusteni.
-    echo "Zoradene podla:"
-    echo "-t    casu [default]"
-    echo "-s    velkosti"
-    echo "-r    nahodne"
-    echo "-a    abecedne"
-    exit
-elif [ "$1" == "-t" ]; then    # time
-    CMD="ls -w1 -t"
-elif [ "$1" == "-s" ]; then    # size
-    CMD="ls -w1 -S"
-elif [ "$1" == "-r" ]; then    # random
-    #CMD="ls -w1 | sort -R"     # slow because it computes a hash for each line
-    CMD="ls -w1 | shuf"
-elif [ "$1" == "-a" ]; then    # alphabetical 
-    CMD="ls -w1"
-else
-    CMD="ls -w1 -t"
-fi
+function shuffle {
+    local i tmp size max rand
 
-if [ -d "$1" ]; then
-    DIR="$1"
-elif [ $# -gt 1 -a -d "$2" ]; then
-    DIR="$2"
-else
-    printf "Zadajte priecinok [/Volumes/Data/Hudba/mp3]: "
-    read DIR
-fi
-#if [ -z $DIR ]; then
-#	DIR=/Volumes/Data/Hudba/mp3
-#fi
-eval cd "\"${DIR:=/Volumes/Data/Hudba/mp3}\"" 2>/dev/null
-if [ $? -ne 0 ];then
-    VALID=0
-    while [ $VALID -ne 1 ]; do
-        printf "Neplatny adresar, zadajte znovu:"
-        read DIR
-        cd "${DIR:=/Volumes/Data/Hudba/mp3}" 2>/dev/null
-        if [ $? -eq 0 ];then
-            VALID=1
-        fi
+    #$RANDOM % (i+1) is biased because of the limited range of $RANDOM
+    #Compensate by using a range which is a multiple of the array size.
+    size=${#array[*]}
+    max=$(( 32768 / size * size ))
+   
+    for ((i=size-1; i>0; i--)); do
+        while (( (rand=$RANDOM) >= max )); do :; done
+        rand=$(( rand % (i+1) ))
+        tmp=${array[i]} array[i]=${array[rand]} array[rand]=$tmp
     done
-fi
+}
 
-printf "Pocet poslednych pesniciek [100]: "
-read COUNT
-if [ -z $COUNT ]; then
-	COUNT=100
-fi
-
-echo
-echo "+-------------------------------------------------------------------------------+"
-echo "  Prehravam poslednych $COUNT piesni z priecinku: '$DIR'                         "
-echo "+-------------------------------------------------------------------------------+"
-echo "* Stlacte:                                                                      *"
-echo "*  'n'    pre dalsiu piesen,                                                    *"
-echo "*  'p'    pre pozastavenie prehravania,                                         *"
-echo "*  'q'    pre ukoncenie.                                                        *"
-echo "*  ^C     pre ukoncenie po aktualnej piesni.                                    *"
-echo "*  't'    pre zrusenie cakania na volbu (v pripade zleho vypoctu).              *"
-echo "*********************************************************************************"
-echo
-
-OLDIFS=$IFS
-IFS=$'\n'
-N=1
-for file in `eval $CMD | head -n $COUNT`
-do 
-	if [ -d $file ]; then
-		continue
-	elif [ "$file" == "${file%.mp3}" -a "$file" == "${file%.mp4}" -a "$file" == "${file%.mpeg}" -a "$file" == "${file%.flv}" -a "$file" == "${file%.avi}" -a "$file" == "${file%.3gp}" -a "$file" == "${file%.aac}" -a "$file" == "${file%.wmv}" -a "$file" == "${file%.mkv}" ]; then
-		#find . -name "*.mp3" -o -name "*.ogg"
-		continue
-	fi
-
-	BITRATE=$(afinfo "$file" | grep -o "bit rate: \d*" | sed "s/bit rate: //g;s/\([[:digit:]]*\)\([[:digit:]][[:digit:]][[:digit:]]\)/\1kb\/s/g")
-	DURATION_SEC=$(afinfo "$file" | grep -o "duration: .*" | grep -o "\d\d*\." | sed s/[^[:digit:]]//g) # | awk '{print $0 / 60}')
+function playFile {
+	BITRATE=$(afinfo "$1" | grep -o "bit rate: \d*" | sed "s/bit rate: //g;s/\([[:digit:]]*\)\([[:digit:]][[:digit:]][[:digit:]]\)/\1kb\/s/g")
+	DURATION_SEC=$(afinfo "$1" | grep -o "duration: .*" | grep -o "\d\d*\." | sed s/[^[:digit:]]//g) # | awk '{print $0 / 60}')
 	
 	
-	afplay -q 1 "$file" &
+	afplay -q 1 "$1" &
 	PID=$!
     if [ ! -z "$DURATION_SEC" ]; then    # kvoli mp4 suborom, ktore neotvori afinfo
-    	echo "$N. $file [$BITRATE, `expr $DURATION_SEC / 60`m`expr $DURATION_SEC % 60`s] ($PID)"
+    	echo "$N. $1 [$BITRATE, `expr $DURATION_SEC / 60`m`expr $DURATION_SEC % 60`s] ($PID)"
     	#(PID) kvoli tomu ked ukonci s ^C tak ukonci cakanie na volbu, ale afplay stale bezi na pozadi
     else
-    	echo "$N. $file [$BITRATE, $DURATION_SEC] ($PID)"
+    	echo "$N. $1 [$BITRATE, $DURATION_SEC] ($PID)"
     fi
 
 	Q=
@@ -100,7 +40,7 @@ do
     
     while [ "$Q" != "T" ];do
 		Q="T"
-		echo "Cakam ${WAIT_TIME}s na vstup"
+		#echo "Cakam ${WAIT_TIME}s na vstup"
         TMP=`awk 'BEGIN{srand();print int(rand()*(65535-50000))+50000 }'`
         x=$TMP
 		read -t $WAIT_TIME x
@@ -124,6 +64,135 @@ do
 			Q="F"
 		fi
 	done
-	N=`expr $N + 1`
-done
-IFS=$OLDIFS;
+}
+
+function playDir {
+    OLDIFS=$IFS
+    IFS=$'\n'
+    cd "$DIR"
+    for file in `eval $CMD | head -n $COUNT`
+    do 
+    	if [ -d $file -a $RECURSIVE -eq 1 ]; then
+            DIR="$file"
+    		playDir
+    	elif [ "$file" == "${file%.mp3}" -a "$file" == "${file%.mp4}" -a "$file" == "${file%.mpeg}" -a "$file" == "${file%.flv}" -a "$file" == "${file%.avi}" -a "$file" == "${file%.3gp}" -a "$file" == "${file%.aac}" -a "$file" == "${file%.wmv}" -a "$file" == "${file%.mkv}" ]; then
+    		#find . -name "*.mp3" -o -name "*.ogg"
+    		continue
+    	fi
+    
+        playFile "$file"
+    	N=`expr $N + 1`
+    done
+    cd - >/dev/null
+    IFS=$OLDIFS
+}
+
+
+# ********** CHECK OPTION ************ 
+OPT=1
+if [ "$1" == "-h" -o "$1" == "--help" ]; then
+    echo Prehrava hudobne subory z priecinku vybrateho po spusteni.
+    echo "Zoradene podla:"
+    echo "-t    casu [default]"
+    echo "-s    velkosti"
+    echo "-r    nahodne"
+    echo "-a    abecedne"
+    exit
+elif [ "$1" == "-t" ]; then    # time
+    CMD="ls -w1 -t"
+elif [ "$1" == "-s" ]; then    # size
+    CMD="ls -w1 -S"
+elif [ "$1" == "-r" ]; then    # random
+    #CMD="ls -w1 | sort -R"     # slow because it computes a hash for each line
+    CMD="ls -w1 | shuf"
+elif [ "$1" == "-a" ]; then    # alphabetical 
+    CMD="ls -w1"
+else
+    CMD="ls -w1 -t"
+    OPT=0
+fi
+
+
+# ************ IF NO FILES WERE SPECIFIED **************
+DIROPT=0
+if [ $# -eq 0 -o $# -eq 1 -a $OPT -eq 1 ]; then
+    printf "Zadajte priecinok [/Volumes/Data/Hudba/mp3]: "
+    read DIR
+    eval cd "\"${DIR:=/Volumes/Data/Hudba/mp3}\"" 2>/dev/null
+    if [ $? -ne 0 ];then
+        VALID=0
+        while [ $VALID -ne 1 ]; do
+            printf "Neplatny adresar, zadajte znovu: "
+            read DIR
+            cd "${DIR:=/Volumes/Data/Hudba/mp3}" 2>/dev/null
+            if [ $? -eq 0 ];then
+                VALID=1
+            fi
+        done
+    fi
+    DIROPT=1
+fi
+
+# *********** GET NUMBER OF SONGS TO PLAY *************
+printf "Pocet poslednych pesniciek [100]: "
+read COUNT
+if [ -z $COUNT ]; then
+	COUNT=100
+fi
+
+# ***********  *************
+printf "Zanorovat sa do priecinkov? [y/N]: "
+read RECURSIVE
+if [ -z "$RECURSIVE" -o "$RECURSIVE" == "N" ]; then
+	RECURSIVE=0
+else
+    RECURSIVE=1
+fi
+
+
+# ********** MAIN PROGRAM ************
+echo
+echo "+-------------------------------------------------------------------------------+"
+echo "  Prehravam poslednych $COUNT piesni z priecinku: '$DIR'                         "
+echo "+-------------------------------------------------------------------------------+"
+echo "* Stlacte:                                                                      *"
+echo "*  'n'    pre dalsiu piesen,                                                    *"
+echo "*  'p'    pre pozastavenie prehravania,                                         *"
+echo "*  'q'    pre ukoncenie.                                                        *"
+echo "*  ^C     pre ukoncenie po aktualnej piesni.                                    *"
+echo "*  't'    pre zrusenie cakania na volbu (v pripade zleho vypoctu).              *"
+echo "*********************************************************************************"
+echo
+
+if [ $DIROPT -eq 0 ]; then
+    N=1
+    if [ $OPT -eq 1 ]; then
+        # Skip option
+        array=( "${@:2}" )
+    else
+        array=( "$@" )
+    fi
+    if [ $OPT -eq 1 -a "$1" == "-r" ];then
+        echo "Prehadzujem argumenty.."
+        shuffle
+    fi
+    # Cycle through files
+    for file in "${array[@]}"
+    do
+        if [ -d "$file" ]; then
+            DIR="$file"
+            playDir
+    	elif [ "$file" == "${file%.mp3}" -a "$file" == "${file%.mp4}" -a "$file" == "${file%.mpeg}" -a "$file" == "${file%.flv}" -a "$file" == "${file%.avi}" -a "$file" == "${file%.3gp}" -a "$file" == "${file%.aac}" -a "$file" == "${file%.wmv}" -a "$file" == "${file%.mkv}" ]; then
+            echo "'$file' nie je audio subor ani priecinok."
+            shift
+            continue
+        else
+            playFile "$file"
+    	    N=`expr $N + 1`
+        fi
+        shift
+    done
+else
+    N=1
+    playDir
+fi
