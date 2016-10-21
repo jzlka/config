@@ -20,6 +20,7 @@ alias la='ls -A'
 
 # 	==- rm -==
 # alias rm='rm -i'
+# alias rm='mv \!* ~/.trash'
 
 
 # 	==- grep -==
@@ -38,6 +39,10 @@ alias gvi='/Applications/MacVim.app/Contents/MacOS/Vim -g'
 
 #	==- ine -==
 #alias massif-visualizer='/Applications/MacPorts/KDE4/massif-visualizer.app/Contents/MacOS/massif-visualizer'
+#if [ ! -d ~/.trash ]; then 
+#    mkdir ~/.trash
+#fi
+#alias del='mv \!* ~/.trash'
 
 
 # 	==- pacman -==
