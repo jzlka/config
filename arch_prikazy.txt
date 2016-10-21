@@ -102,8 +102,8 @@ mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt -a /tmp/file.jpg
 # git <verb> --help
 # man git-<verb>
 
-# git config --global user.email "TheKuko@users.noreply.github.com"
-## git config --global user.email "jozef.zuzelka@gmail.com"
+## git config --global user.email "TheKuko@users.noreply.github.com"
+# git config --global user.email "jozef.zuzelka@gmail.com"
 # git config --global user.name "TheKuko"
 
  -- Vygenerovanie ssh klucov
@@ -149,6 +149,7 @@ mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt -a /tmp/file.jpg
 ## ikonky na ploche treba- nastavit nautilus alebo pacmanfs aby vykreslovali
 ## plochu (vid google)
 ## iDesk, wbar
+## TODO na starom ntb som nainstaloval pozriet co
 
 ## Prehravanie vlc v konzole
 # vlc -I ncurses /path/to/file[s]
@@ -156,18 +157,26 @@ mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt -a /tmp/file.jpg
 ## Jednorazova synch casu
 # ntpd -q
 
-## Volna pamanat
+## Volna pamat
 # free -h
 
 ## vim dva subory vedla seba
 # vim -o file1 file2    ##horizontalne
 # vim -O file1 file2    ##vertikalne
-# set scrollbind
+## :set scrollbind
+## ^W W
 
 ## Swap
 # cat /proc/sys/vm/swappiness   ##current swappiness value (0-100)defult=60
 # sysctl vm.swappiness=10       ##temporarily set value
 # vm.swappiness=10 -> /etc/sysctl.d/99-sysctl.conf
+
+
+## Zvacsenie tmp
+# [FILE] /etc/fstab
+## tmpfs                  /tmp      tmpfs     size=2G 0      0
+# mount -o remount /tmp
+
 
 ## ------------------------------- DISKY ----------------------------------
 ## zobrazenie particii
@@ -327,6 +336,7 @@ mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt -a /tmp/file.jpg
 
  -- Pre korektne pripojenie ntfs particii
 # [PKG] pacman -S ntfs-3g ## pre r/w opravnenia pri pripojeni ntfs particie, treba pridane prepinace v /etc/fstab
+# relatime,rw,user,auto,exec,comment=x-gvfs-show,uid=777,gid=777 0 0
 ## pre zobrazenie v Thunare pridat ,comment=x-gvfs-show do fstab
 
 --==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--
@@ -339,7 +349,7 @@ mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt -a /tmp/file.jpg
  -- Trvala zmena fontu konzoly
 
 ## odskusat fonty
-# setfont eurlatgr
+# setfont eurlatgr -m 8859-2
 
 ## nacitat klavesnicu
 # localectl list-keymaps
@@ -351,7 +361,7 @@ mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt -a /tmp/file.jpg
 ## KEYMAP=(nieco z # localectl list-keymaps)
 
 # [FILE] /etc/mkinitcpio.conf 
-## pridat MODULES="radeon"
+## pridat MODULES="radeon" pre ATI i915 pre intel ...
 
 # mkinitcpio -p linux
 
@@ -701,9 +711,11 @@ mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt -a /tmp/file.jpg
 # [FILE] /etc/grub.d/40_custom
 
 ## zrychlenie startu a skrytie grubu
+# [FILE] /etc/grub.d/31_hold_shift
 # [FILE] /etc/default/grub
+## GRUB_TIMEOUT="0"
+## GRUB_HIDDEN_TIMEOUT="0"
 ## GRUB_FORCE_HIDDEN_MENU="true"
-## -- unrestricted
 
 # sudo grub-mkconfig -o /boot/grub/grub.cfg
 --==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==-==--

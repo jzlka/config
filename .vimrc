@@ -1,11 +1,12 @@
+" TODO nech pri ulozeni c,h suborov vzdy skontroluje na todo a hodi do
+" hlavicky vsetky
+" todo :12 nema byt pre win_shell opacne lomitko?
 set autoindent
 set nocompatible
 " More on YouCompleteMe:
 " https://github.com/Valloric/YouCompleteMe/blob/master/README.md
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
-"""call vundle#begin()
-"call vundle#rc()
 
 " Just one vimrc file for Windows & Linux
 let win_shell = (has('win32') || has('win64')) && &shellcmdflag =~ '/'
@@ -84,19 +85,20 @@ au BufRead,BufNewFile *.t2t    setfiletype txt2tags
 au BufRead,BufNewFile *.smt    setfiletype smt-lib
 au BufRead,BufNewFile *.smt2    setfiletype smt-lib
 
-" Insert header into bash script, C and C++ files
-autocmd bufnewfile *.c,*.cpp so ~/.vim/templates/c_header.txt
-autocmd bufnewfile *.h,*.hpp so ~/.vim/templates/h_header.txt
+" Insert header into bash script, C/C++/C#/sh files
+autocmd bufnewfile *.{c,cpp,cs} so ~/.vim/templates/c_header.txt
+autocmd bufnewfile *.{h,hpp} so ~/.vim/templates/h_header.txt
 autocmd bufnewfile *.sh so ~/.vim/templates/sh_header.txt
-autocmd bufnewfile *.c,*.h,*.hpp,*.cpp,*.sh exe "1," . 12 . "g/filename/s//".expand("%:t")
-autocmd bufnewfile *.c,*.h,*.hpp,*.cpp,*.sh exe "1," . 12 . "g/Created:.*/s/Created:.*/Created:\t" .strftime("%d.%m.%Y %H:%M")
+autocmd bufnewfile *.{c,h,hpp,cpp,sh,cs} exe "1," . 12 . "g/filename/s//".expand("%:t")
+autocmd bufnewfile *.{c,h,hpp,cpp,sh,cs} exe "1," . 12 . "g/Created:.*/s/Created:.*/Created:\t" .strftime("%d.%m.%Y %H:%M")
 autocmd bufnewfile *.sh exe "1," . 10 . "g/SHELL:.*/s//SHELL:\t\t".system('$SHELL --version 2>&1 | head -n 1')|$
-autocmd bufnewfile *.c,*.h exe "1," . 12 . "g/gcc:.*/s//gcc:\t\t".system('gcc -v 2>&1 | grep "version [0-9]"')|$
-autocmd bufnewfile *.hpp,*.cpp exe "1," . 12 . "g/gcc:.*/s//g++:\t\t".system('g++ -v 2>&1 | grep "version [0-9]"')|$
-autocmd bufnewfile *.h,*.hpp exe "13," . 18 . "g/_FILE_H_/s/FILE/".toupper(expand("%:t:r"))|16
-"autocmd Bufwritepre,filewritepre *.c,*.h,,*.hpp,*.cpp,*.sh execute "normal ma"
-"autocmd Bufwritepre,filewritepre *.c,*.h,*.hpp,*.cpp,*.sh exe "1," . 12 . "g/Edited:.*/s/Edited:.*/Edited:\t\t" .strftime("%d.%m.%Y %H:%M")
-"autocmd bufwritepost,filewritepost *.c,*.h,*.hpp,*.cpp,*.sh execute "normal `a"
+autocmd bufnewfile *.{c,h} exe "1," . 12 . "g/gcc:.*/s//gcc:\t\t".system('gcc -v 2>&1 | grep "version [0-9]"')|$
+autocmd bufnewfile *.{hpp,cpp} exe "1," . 12 . "g/gcc:.*/s//g++:\t\t".system('g++ -v 2>&1 | grep "version [0-9]"')|$
+autocmd bufnewfile *.cs exe "1," . 12 . "g/gcc:.*/s//mono:\t\t".system('mcs --version 2>&1')|$
+autocmd bufnewfile *.{h,hpp} exe "13," . 18 . "g/_FILE_H_/s/FILE/".toupper(expand("%:t:r"))|16
+"autocmd Bufwritepre,filewritepre *.c,*.h,,*.hpp,*.cpp,*.sh,*.cs execute "normal ma"
+"autocmd Bufwritepre,filewritepre *.c,*.h,*.hpp,*.cpp,*.sh,*.cs exe "1," . 12 . "g/Edited:.*/s/Edited:.*/Edited:\t\t" .strftime("%d.%m.%Y %H:%M")
+"autocmd bufwritepost,filewritepost *.c,*.h,*.hpp,*.cpp,*.sh,*.cs execute "normal `a"
 
 " mouse support
 "set mouse=a
