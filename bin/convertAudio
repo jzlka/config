@@ -1,5 +1,6 @@
 #!/bin/bash
 # TODO ked je v nazve $ berie to terminal ako premennu (uz pri spustani afplay)
+#TODO upravit vypis po prerobeni 
 # Author: Jozef Zuzelka
 
 IFS=$'\n'
@@ -13,8 +14,8 @@ do
     echo;
     echo "-==- Processing file: $file -==-"
     if [ ! -r "$file" ]; then
-        echo "File '$file' either does not exists or is not readeable."
-        exit 1
+        echo "File '$file' either does not exists or is not readable."
+	continue
     fi
     
     ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | grep --color -e "Audio: [^ ]* " -e "\d* kb/s"
