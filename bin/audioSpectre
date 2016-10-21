@@ -1,0 +1,34 @@
+#!/bin/bash
+# Author: Jozef Zuzelka
+if [ $# -lt 1 ]; then
+    echo "At least 1 file must be specified"
+    exit 1
+fi
+
+printf "Zadajte vystupny priecinok [povodny]: "
+read x
+OUTPUT_DIR=0
+if [ ! -z "$x" ]; then
+    OUTPUT_DIR=1
+fi
+
+IFS=$'\n'
+for file in "$@"
+do
+    name="$(echo $file | rev | cut -d'.' -f2- | cut -d'/' -f1 | rev)"
+    dir="$(echo $file | rev | cut -d'/' -f2- | rev)"
+    bitrate=`ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | sed "s/.*, \([[:digit:]][[:digit:]]*\)[^,]*kb\/s.*/\1/g"`
+
+    if [ $OUTPUT_DIR -eq 0 ]; then
+        x=$dir
+    fi
+    echo;
+    echo "-==- Processing file: $file -==-"
+    if [ ! -r "$file" ]; then
+        echo "File '$file' either does not exists or is not readable."
+	continue
+    fi
+
+    ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | grep --color -e "Audio: [^ ]* " -e "\d* kb/s"
+    sox "$file" -n remix 2 trim 0 30 spectrogram -x 600 -y 200 -z 100 -t "$file" -o "${x}/${name}".png
+done
