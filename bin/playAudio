@@ -1,5 +1,8 @@
 #!/bin/sh
 # Author: Jozef Zuzelka
+# TODO ked je zadany priecinok a je povolene zanorovanie a je prepinac tak vytiahnut vsetky subory pomocou find a potom zoradit
+# TODO umoznit zmazanie piesne
+# TODO umoznit zdvihnut pocet prehravanych pesniciek pocas prehravania
 
 function shuffle {
     local i tmp size max rand
@@ -44,19 +47,34 @@ function playFile {
         TMP=`awk 'BEGIN{srand();print int(rand()*(65535-50000))+50000 }'`
         x=$TMP
 		read -t $WAIT_TIME x
-		if [ "$x" == "n" ]; then
+		if [ "$x" == "n" ]; then                        # play the next one
 			kill $PID 2>/dev/null
-		elif [ "$x" == "q" ]; then
-			kill $PID 2>/dev/null
-			exit 0
-		elif [ "$x" == "p" ]; then
+		elif [ "$x" == "pi" ]; then                     # pause immediatelly
+            printf "Pri obnoveni znovu spustit aktualnu? [Y/n]: "
+            read -t 5 op
+            kill $PID 2>/dev/null
+			echo "Prehravanie pozastavene."
+			while [ "$x" != "c" ]; do
+				printf "Zadajte 'c' pre pokracovanie: "
+				read x
+			done
+            if [ -z "$op" -o "$op" == "y" -o "$op" == "Y" ]; then
+	            afplay -q 1 "$1"
+            fi
+		elif [ "$x" == "p" ]; then                      # pause after actual one
 			echo "Prehravanie sa pozastavi po aktualnej piesni."
             wait $PID 2>/dev/null
 			while [ "$x" != "c" ]; do
 				printf "Zadajte 'c' pre pokracovanie: "
 				read x
 			done
-		elif [ "$x" == "t" -o "$x" == "$TMP" ]; then    #ak cas uplynul
+		elif [ "$x" == "r" ]; then                      # delete and play next one
+			kill $PID 2>/dev/null
+            mv "$1" ~/.Trash
+		elif [ "$x" == "q" ]; then                      # quit immediatelly
+			kill $PID 2>/dev/null
+			exit 0
+		elif [ "$x" == "t" -o "$x" == "$TMP" ]; then    # time exceeded
 			wait $PID 2>/dev/null
         else
 			#nebola platna volba- pokracujeme v cykleni
@@ -112,6 +130,8 @@ else
     OPT=0
 fi
 
+mkdir -p ~/.Trash
+
 
 # ************ IF NO FILES WERE SPECIFIED **************
 DIROPT=0
@@ -152,16 +172,18 @@ fi
 
 # ********** MAIN PROGRAM ************
 echo
-echo "+-------------------------------------------------------------------------------+"
-echo "  Prehravam poslednych $COUNT piesni z priecinku: '$DIR'                         "
-echo "+-------------------------------------------------------------------------------+"
-echo "* Stlacte:                                                                      *"
-echo "*  'n'    pre dalsiu piesen,                                                    *"
-echo "*  'p'    pre pozastavenie prehravania,                                         *"
-echo "*  'q'    pre ukoncenie.                                                        *"
-echo "*  ^C     pre ukoncenie po aktualnej piesni.                                    *"
-echo "*  't'    pre zrusenie cakania na volbu (v pripade zleho vypoctu).              *"
-echo "*********************************************************************************"
+echo "+---------------------------------------------------------------------------+"
+echo "  Prehravam poslednych $COUNT piesni z priecinku: '$DIR'                     "
+echo "+---------------------------------------------------------------------------+"
+echo "* Stlacte:                                                                  *"
+echo "*  'n'    pre dalsiu piesen,                                                *"
+echo "*  'p'    pre pozastavenie prehravania po aktualnej piesni,                 *"
+echo "*  'pi'   pre okamzite pozastavenie prehravania,                            *"
+echo "*  'r'    pre odstranenie prehravanej piesne,                               *"
+echo "*  'q'    pre ukoncenie.                                                    *"
+echo "*  ^C     pre ukoncenie po aktualnej piesni.                                *"
+echo "*  't'    pre zrusenie cakania na volbu (v pripade zleho vypoctu).          *"
+echo "*****************************************************************************"
 echo
 
 if [ $DIROPT -eq 0 ]; then

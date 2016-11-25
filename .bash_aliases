@@ -68,3 +68,5 @@ alias pacupd='sudo pacman -Sy && sudo abs'         # Update and refresh the loca
 alias pacinsd='sudo pacman -S --asdeps'            # Install given package(s) as dependencies
 alias pacmir='sudo pacman -Syy'                    # Force refresh of all package lists after updating /etc/pacman.d/mirrorlist
 alias pacclean='sudo pacman -R $(pacman -Qdtq)'
+
+alias sed='gsed'

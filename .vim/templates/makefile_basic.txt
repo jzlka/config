@@ -1,5 +1,4 @@
-:insert 
-#!/bin/sh
+:insert
 #  @file		filename
 #	@brief		1.project IPK, FIT VUT Brno
 #	@author		Jozef Zuzelka (xzuzel00)
@@ -7,10 +6,17 @@
 #	Created:
 #	Edited:
 # 	Version:	1.0.0
-#	SHELL:
-#	@bug
-#	@todo
+#	make:
 
 
+TARGET=
 
+CXXFLAGS=-std=c++14 -pedantic -Wall -Wextra -g
+.PHONY: clean
+
+$(TARGET): $(TARGET).o
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+clean:
+	-rm $(TARGET) $(TARGET).o
 .

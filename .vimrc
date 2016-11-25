@@ -89,16 +89,21 @@ au BufRead,BufNewFile *.smt2    setfiletype smt-lib
 autocmd bufnewfile *.{c,cpp,cs} so ~/.vim/templates/c_header.txt
 autocmd bufnewfile *.{h,hpp} so ~/.vim/templates/h_header.txt
 autocmd bufnewfile *.sh so ~/.vim/templates/sh_header.txt
-autocmd bufnewfile *.{c,h,hpp,cpp,sh,cs} exe "1," . 12 . "g/filename/s//".expand("%:t")
-autocmd bufnewfile *.{c,h,hpp,cpp,sh,cs} exe "1," . 12 . "g/Created:.*/s/Created:.*/Created:\t" .strftime("%d.%m.%Y %H:%M")
+autocmd bufnewfile Makefile so ~/.vim/templates/makefile_basic.txt
+autocmd bufnewfile *.{c,h,hpp,cpp,sh,cs},Makefile exe "1," . 12 . "g/filename/s//".expand("%:t")
+autocmd bufnewfile *.{c,h,hpp,cpp,sh,cs},Makefile exe "1," . 12 . "g/Created:.*/s/Created:.*/Created:\t" .strftime("%d.%m.%Y %H:%M")
 autocmd bufnewfile *.sh exe "1," . 10 . "g/SHELL:.*/s//SHELL:\t\t".system('$SHELL --version 2>&1 | head -n 1')|$
 autocmd bufnewfile *.{c,h} exe "1," . 12 . "g/gcc:.*/s//gcc:\t\t".system('gcc -v 2>&1 | grep "version [0-9]"')|$
 autocmd bufnewfile *.{hpp,cpp} exe "1," . 12 . "g/gcc:.*/s//g++:\t\t".system('g++ -v 2>&1 | grep "version [0-9]"')|$
 autocmd bufnewfile *.cs exe "1," . 12 . "g/gcc:.*/s//mono:\t\t".system('mcs --version 2>&1')|$
+autocmd bufnewfile Makefile exe "1," . 12 . "g/make:.*/s//make:\t\t".system('make --version 2>&1 | head -n1')|$
 autocmd bufnewfile *.{h,hpp} exe "13," . 18 . "g/_FILE_H_/s/FILE/".toupper(expand("%:t:r"))|16
-"autocmd Bufwritepre,filewritepre *.c,*.h,,*.hpp,*.cpp,*.sh,*.cs execute "normal ma"
-"autocmd Bufwritepre,filewritepre *.c,*.h,*.hpp,*.cpp,*.sh,*.cs exe "1," . 12 . "g/Edited:.*/s/Edited:.*/Edited:\t\t" .strftime("%d.%m.%Y %H:%M")
-"autocmd bufwritepost,filewritepost *.c,*.h,*.hpp,*.cpp,*.sh,*.cs execute "normal `a"
+autocmd Bufwritepre,filewritepre *.c,*.h,*.hpp,*.cpp,*.sh,*.cs,Makefile execute "normal ma"
+autocmd Bufwritepre,filewritepre *.c,*.h,*.hpp,*.cpp,*.sh,*.cs,Makefile exe "1," . 12 . "g/Edited:.*/s/Edited:.*/Edited:\t\t" .strftime("%d.%m.%Y %H:%M")
+autocmd bufwritepost,filewritepost *.c,*.h,*.hpp,*.cpp,*.sh,*.cs,Makefile execute "normal `a"
+"autocmd bufwritepost,filewritepost *.c,*.h,*.hpp,*.cpp,*.cs exe "let @s="system('grep "^.*[^@]todo.*" '.expand('%'))
+"autocmd bufwritepost,filewritepost *.c,*.h,*.hpp,*.cpp,*.cs exe "10"
+"autocmd bufwritepost,filewritepost *.c,*.h,*.hpp,*.cpp,*.cs exe '"sp'
 
 " mouse support
 "set mouse=a
@@ -132,14 +137,14 @@ set backspace=indent,eol,start
 set formatoptions+=r
 
 " C style programming:
-setlocal tabstop=4
-setlocal shiftwidth=4
-setlocal expandtab
+set tabstop=4
+set shiftwidth=4
+set expandtab
 "setlocal noexpandtab
-setlocal smarttab
-setlocal smartindent
-setlocal tw=79
-setlocal tabpagemax=100
+set smarttab
+set smartindent
+set tw=79
+set tabpagemax=100
     
 " save
 map <F2> <ESC>:w<CR>
@@ -264,6 +269,9 @@ command! -nargs=1 Search call setqflist([]) | silent bufdo grepadd! <args> %
 "nnoremap <right> :cnext<cr>zvzz
 
 colo 256-jungle
+
+highlight OverLength ctermbg=red ctermfg=white guibg=#FFD9D9
+match OverLength /\%81v.\+/
 
 
 "   *** CREDITS ***

@@ -15,12 +15,14 @@ fi
 IFS=$'\n'
 for file in "$@"
 do
-    name="$(echo $file | rev | cut -d'.' -f2- | cut -d'/' -f1 | rev)"
-    dir="$(echo $file | rev | cut -d'/' -f2- | rev)"
+    name="$(echo "$file" | rev | cut -d'.' -f2- | cut -d'/' -f1 | rev)"
+    dir="$(echo "$file" | rev | cut -d'/' -f2- | rev)"
     bitrate=`ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | sed "s/.*, \([[:digit:]][[:digit:]]*\)[^,]*kb\/s.*/\1/g"`
 
     if [ $OUTPUT_DIR -eq 0 ]; then
         x=$dir
+    else
+        x=$(eval realpath "$x") # e.g. ~/tmp
     fi
     echo;
     echo "-==- Processing file: $file -==-"
