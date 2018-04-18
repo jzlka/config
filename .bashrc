@@ -14,6 +14,8 @@ test -e ${HOME}/.iterm2_shell_integration.bash && source ${HOME}/.iterm2_shell_i
 #	*** Variables ***
 export EDITOR="vim"
 export LS_COLORS=$LS_COLORS:'di=1;33:ow=01;33:'
+export IBP=~/FIT/6.semester/IBP/BP/
+export PRACA=/Volumes/Data/Praca/Safetica/SafeticaDaemon/
 #LS_COLORS=$LS_COLORS:'di=1;33:ow=01;36:'; export LS_COLORS
 
 # Define some colors
@@ -74,6 +76,7 @@ shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=30000  #default nastavi na velkost HISTSIZE
+HISTTIMEFORMAT="%d/%m/%y %T "
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -202,3 +205,5 @@ extract () {
       echo "'$1' is not a valid file!"
   fi
 }
+
+ssh-add -A 2>/dev/null;

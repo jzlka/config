@@ -11,10 +11,10 @@
  *  @bug
  *  @todo
  */
-#ifndef _FILE_H_
-#define _FILE_H_
+
+#pragma once
 
 
 
-#endif  /* _FILE_H_ */
+
 .

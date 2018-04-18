@@ -30,11 +30,19 @@ alias fgrep='fgrep --color'
 
 
 #	==- vim -==
-alias vi='/Applications/MacVim.app/Contents/MacOS/Vim'
-alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
-alias gvi='/Applications/MacVim.app/Contents/MacOS/Vim -g'
+#alias vi='/Applications/MacVim.app/Contents/MacOS/Vim'
+#alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
+#alias gvi='/Applications/MacVim.app/Contents/MacOS/Vim -g'
 #alias vim='/usr/local/Cellar/vim/7.4.998/bin/vim'
 #alias vim='/Users/ja/bin/mvim'
+
+
+#   ==- cd -==
+alias ..="cd .."
+alias ..2="cd ../.."
+alias ..3="cd ../../.."
+alias ..4="cd ../../../.."
+alias ..5="cd ../../../../.."
 
 
 #	==- ine -==
@@ -68,5 +76,4 @@ alias pacupd='sudo pacman -Sy && sudo abs'         # Update and refresh the loca
 alias pacinsd='sudo pacman -S --asdeps'            # Install given package(s) as dependencies
 alias pacmir='sudo pacman -Syy'                    # Force refresh of all package lists after updating /etc/pacman.d/mirrorlist
 alias pacclean='sudo pacman -R $(pacman -Qdtq)'
-
-alias sed='gsed'
+alias inkspace='/usr/local/Cellar/inkscape/0.92.1/bin/inkscape'

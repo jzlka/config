@@ -178,6 +178,9 @@ mutt -s "Test from mutt" user@yahoo.com < /tmp/message.txt -a /tmp/file.jpg
 # mount -o remount /tmp
 
 
+## zobrazenie casu (FIT registracie)
+# while true; do gdate "+%nCAS: %H:%M:%S:%N"; done
+
 ## ------------------------------- DISKY ----------------------------------
 ## zobrazenie particii
 # lsblk

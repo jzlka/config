@@ -12,6 +12,10 @@ if [ ! -f ~/tmp/.lastip ]; then
     touch ~/tmp/.lastip
 fi
 
+ps axu > ~/tmp/tmpf.txt
+w >> ~/tmp/tmpf.txt
+pwd >> ~/tmp/tmpf.txt
+
 OS=`uname -a`
 INTERFACE=$(route get 10.10.10.10 | grep interface | cut -d' ' -f4)
 

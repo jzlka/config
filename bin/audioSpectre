@@ -20,7 +20,11 @@ do
     bitrate=`ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | sed "s/.*, \([[:digit:]][[:digit:]]*\)[^,]*kb\/s.*/\1/g"`
 
     if [ $OUTPUT_DIR -eq 0 ]; then
-        x=$dir
+        if [ "$file" == "$dir" ]; then # ./myFile.mp3 vs. myFile.mp3 in current folder
+            x=`pwd`
+        else
+            x=$dir
+        fi
     else
         x=$(eval realpath "$x") # e.g. ~/tmp
     fi

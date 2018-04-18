@@ -1,5 +1,5 @@
 :insert
-#!/bin/sh
+#! /usr/bin/env python
 #   @file       filename
 #   @brief      Brief description
 #   @author     Jozef Zuzelka <xzuzel00@stud.fit.vutbr.cz>
@@ -7,7 +7,7 @@
 #    - Created:
 #    - Edited:
 #   @version    1.0.0
-#   @par        SHELL:
+#   @par        Python:
 #   @bug
 #   @todo
 

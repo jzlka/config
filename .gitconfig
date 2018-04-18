@@ -1,0 +1,85 @@
+[user]
+	name = Jozef Zuzelka
+	email = jozef.zuzelka@gmail.com
+[core]
+	editor = vim
+	excludesfile = /Users/ja/.gitignore_global
+[color]
+	ui = true
+[push]
+	default = simple
+[branch]
+    # git pull should always rebase
+    autosetuprebase = always
+[github]
+	user = TheKuko
+[alias]
+	co = checkout
+	ci = commit -v
+	br = branch
+	st = status
+	di = diff --color-words=color
+	cp = cherry-pick
+	ff = merge --ff
+	cached = diff --cached
+	amend = commit --amend -v
+	cont  = rebase --continue
+	abort = rebase --abort
+	l  = log --oneline --decorate
+	lo = log --decorate
+	lq = log --oneline --decorate --first-parent
+	ll = log --oneline --name-status --decorate
+	lp = log -p
+	last = log -1 --stat
+	ls = ls-files
+	g = log --graph --decorate --oneline --all
+	sg = log --graph --decorate --oneline
+	review-x = log -p --reverse --stat --decorate --source --topo-order --color-words
+	review = log -p --reverse --stat --decorate --source --topo-order
+	fixline = log -1 --abbrev=12 --format='Fixes: %h (\"%s\")'
+[grep]
+	lineNumber = true
+[merge]
+	tool = vimdiff
+	stat = true
+	summary = true
+	ff = false
+	log = true
+[http]
+	sslVerify = 0
+[diff]
+	renames = copies
+[rerere]
+	enabled = true
+[gui]
+	warndetachedcommit = true
+	diffcontext = 10
+[difftool]
+	prompt = false
+[sendemail]
+	from = Jozef Zuzelka <xzuzel00@stud.fit.vutbr.cz>
+	smtpserver = eva.fit.vutbr.cz
+	smtpuser = xzuzel00
+	smtpencryption = ssl
+	chainreplyto = false
+	confirm = auto
+
+[url "http://github.com/"]
+    insteadOf = "gh:"
+[url "git@github.com:"]
+    pushInsteadOf = "https://github.com/"
+    pushInsteadOf = "http://github.com/"
+    pushInsteadOf = "gh:"
+
+[url "git@github.com:TheKuko/"]
+    pushInsteadOf = "my:"
+[url "http://github.com/TheKuko/"]
+    insteadOf = "my:"
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[commit]
+	template = /Users/ja/.stCommitMsg

@@ -1,0 +1,6 @@
+*.DS_Store
+__MACOSX/*
+
+# swapfiles for various editors
+*.sw[n-p]
+*~

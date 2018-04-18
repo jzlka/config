@@ -1,21 +1,30 @@
 :insert
-#  @file		filename
-#	@brief		1.project IPK, FIT VUT Brno
-#	@author		Jozef Zuzelka (xzuzel00)
-#	Mail:		xzuzel00@stud.fit.vutbr.cz
-#	Created:
-#	Edited:
-# 	Version:	1.0.0
-#	make:
+# @file       filename
+# @brief      Brief description
+# @author     Jozef Zuzelka <xzuzel00@stud.fit.vutbr.cz>
+# @date
+#  - Created:
+#  - Edited:
+# @version    1.0.0
+# @par        make:
+# @bug
+# @todo
 
 
 TARGET=
 
+CXX=g++
 CXXFLAGS=-std=c++14 -pedantic -Wall -Wextra -g
+LDFLAGS=
 .PHONY: clean
 
-$(TARGET): $(TARGET).o
-	$(CXX) $(CXXFLAGS) -o $@ $<
+#$(TARGET): $(TARGET).o
+#	$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
+
+#%: %.cpp
+#	$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
+
+all : $(TARGET)
 
 clean:
 	-rm $(TARGET) $(TARGET).o

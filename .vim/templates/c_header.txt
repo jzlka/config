@@ -1,16 +1,17 @@
 :insert
-/** 
- *  @file		filename
- *	@brief		1.project IPK, FIT VUT Brno
- *	@author		Jozef Zuzelka (xzuzel00)
- *	Mail:		xzuzel00@stud.fit.vutbr.cz
- *	Created:
- *	Edited:
- * 	Version:	1.0.0
- *	gcc:
- *	@bug
- *	@todo
+/**
+ *  @file       filename
+ *  @brief      Brief description
+ *  @author     Jozef Zuzelka <xzuzel00@stud.fit.vutbr.cz>
+ *  @date
+ *   - Created:
+ *   - Edited:
+ *  @version    1.0.0
+ *  @par        gcc:
+ *  @bug
+ *  @todo
  */
+
 
 
 

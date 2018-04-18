@@ -1,8 +1,10 @@
 #!/bin/sh
 # Author: Jozef Zuzelka
 # TODO ked je zadany priecinok a je povolene zanorovanie a je prepinac tak vytiahnut vsetky subory pomocou find a potom zoradit
-# TODO umoznit zmazanie piesne
-# TODO umoznit zdvihnut pocet prehravanych pesniciek pocas prehravania
+# TODO prepisat do pythonu s GUI
+# TODO prerobit cykly cez subory na find
+# find /Volumes/Data/Hudba/Albumy/ \( -iname '*.mp3' -o -iname '*.mp4' -o -iname '*.aac' \) -exec bash -x playAudio -r {} +
+# FIXME blbne kontrola na audio subory pri povolenom zanorovani
 
 function shuffle {
     local i tmp size max rand
@@ -68,9 +70,26 @@ function playFile {
 				printf "Zadajte 'c' pre pokracovanie: "
 				read x
 			done
+		elif [ "$x" == "l" ]; then                      # list a songs queue
+            printf "Kolko nasledujucich piesni vypisat? [$COUNT]: "
+            read op
+            if [ -z "$op" ]; then
+			    op=$COUNT
+            fi
+            for file in ${array[*]}
+            do
+                echo "$file"
+            done
+			wait $PID &>/dev/null
 		elif [ "$x" == "r" ]; then                      # delete and play next one
-			kill $PID 2>/dev/null
-            mv "$1" ~/.Trash
+            printf "Naozaj zmazat? [y/N]: "
+            read op
+            if [ "$op" == "y" -o "$op" == "Y" ]; then
+			    kill $PID &>/dev/null
+                mv "$1" ~/.Trash
+            else
+			    wait $PID &>/dev/null
+            fi
 		elif [ "$x" == "q" ]; then                      # quit immediatelly
 			kill $PID 2>/dev/null
 			exit 0
@@ -136,20 +155,15 @@ mkdir -p ~/.Trash
 # ************ IF NO FILES WERE SPECIFIED **************
 DIROPT=0
 if [ $# -eq 0 -o $# -eq 1 -a $OPT -eq 1 ]; then
-    printf "Zadajte priecinok [/Volumes/Data/Hudba/mp3]: "
-    read DIR
-    eval cd "\"${DIR:=/Volumes/Data/Hudba/mp3}\"" 2>/dev/null
-    if [ $? -ne 0 ];then
-        VALID=0
-        while [ $VALID -ne 1 ]; do
-            printf "Neplatny adresar, zadajte znovu: "
-            read DIR
-            cd "${DIR:=/Volumes/Data/Hudba/mp3}" 2>/dev/null
-            if [ $? -eq 0 ];then
-                VALID=1
-            fi
-        done
-    fi
+    while true; do
+        read -e -p "Zadajte priecinok [/Volumes/Data/Hudba/mp3]: " DIR
+        eval cd "${DIR:=/Volumes/Data/Hudba/mp3}" 2>/dev/null
+        if [ $? -eq 0 ];then
+            break;
+        else
+            echo "Neplatny adresar, zadajte znovu."
+        fi
+    done
     DIROPT=1
 fi
 
@@ -179,6 +193,7 @@ echo "* Stlacte:                                                                
 echo "*  'n'    pre dalsiu piesen,                                                *"
 echo "*  'p'    pre pozastavenie prehravania po aktualnej piesni,                 *"
 echo "*  'pi'   pre okamzite pozastavenie prehravania,                            *"
+echo "*  'l'    pre vypis fronty nasledujucich piesni,                            *"
 echo "*  'r'    pre odstranenie prehravanej piesne,                               *"
 echo "*  'q'    pre ukoncenie.                                                    *"
 echo "*  ^C     pre ukoncenie po aktualnej piesni.                                *"
