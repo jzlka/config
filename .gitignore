@@ -1,3 +1,4 @@
 *DS_Store
 ./etc/postfix/smtp_sasl_passwords
 ./.vim/bundle/
+/.gtm/

@@ -11,8 +11,10 @@ brew tap beeftornado/rmtree && brew install gawk
 
 ## Instalacia brew programov
 brew install ffmpeg coreutils cppcheck cloc python doxygen graphviz sox cmake
-brew install zmap imagesnap valgrind afl-fuzz Caskroom/cask/inkscape tcpreplay cscope tmux gnuplot
+brew install zmap imagesnap valgrind afl-fuzz Caskroom/cask/inkscape tcpreplay cscope tmux gnuplot ghostscript
 brew install vim --with-python3
+brew install qcachegrind --with-graphviz
+brew tap git-time-metric/gtm && brew install gtm
 
 
 ## Instalacia prekladaca v terminali

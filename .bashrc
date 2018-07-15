@@ -196,7 +196,7 @@ extract () {
           *.tar.xz)    tar xvf $1     ;;
           *.tbz2)      tar xvjf $1    ;;
           *.tgz)       tar xvzf $1    ;;
-          *.zip)       unzip $1       ;;
+          *.zip)       unzip $1 -d "${1%*.zip}"       ;;
           *.Z)         uncompress $1  ;;
           *.7z)        7z x $1        ;;
           *)           echo "don't know how to extract '$1'..." ;;
@@ -206,4 +206,51 @@ extract () {
   fi
 }
 
-ssh-add -A 2>/dev/null;
+#	*** Archive function ***
+pack () {
+  if [ -f $1 ] ; then
+      case $1 in
+          *.tar.bz2)   tar cvjf $1      ;;
+          *.tar.gz)    tar cvzf $1      ;;
+          *.tar)       tar cvf $1       ;;
+          *.tar.xz)    tar cvf $1       ;;
+          *.tbz2)      tar cvjf $1      ;;
+          *.tgz)       tar cvzf $1      ;;
+          *.zip)       zip -9 -r -j $1  ;;
+          *)           echo "don't know how to archive '$1'..." ;;
+      esac
+  else
+      echo "'$1' is not a valid file!"
+  fi
+}
+
+# https://github.com/git-time-metric/gtm/wiki/FAQs
+function git {
+  command git "$@"
+  rc=$?
+  if [ $rc -ne 0 ]; then
+    return $rc
+  fi
+  case "$1" in
+    init)
+      output=$(gtm init)
+      if [ $? -eq 0 ]; then
+        echo "$output"
+      fi
+      ;;
+    status)
+      output=$(gtm status)
+      if [ $? -eq 0 ]; then
+        echo "$output"
+      fi
+      ;;
+  esac
+  return $rc
+}
+
+pdfmerge() 
+{ 
+    #gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -sOutputFile=$@ ; 
+    gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/default -dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages -dCompressFonts=true -r150 -sOutputFile=$@ ;
+}
+#ssh-add -A 2>/dev/null;

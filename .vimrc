@@ -19,6 +19,7 @@ call vundle#rc(expand(vimDir . '/bundle'))
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'scrooloose/syntastic'
+Plugin 'git-time-metric/gtm-vim-plugin'
 "Plugin 'davidhalter/jedi-vim'
 "Plugin 'hari-rangarajan/CCTree'
 "Plugin 'ctags.vim'
@@ -66,6 +67,8 @@ call vundle#end()            " required
 
 
 
+"let g:ycm_register_as_syntastic_checker = 1
+"let g:ycm_show_diagnostics_ui = 0
 
 let g:ycm_filetype_blacklist = { 'text':1, 'tex':1 }
 let g:ycm_confirm_extra_conf = 0
@@ -411,7 +414,15 @@ endfu
 
 
 
-"" Airline plugin
+" Airline plugin
+let g:gtm_plugin_status_enabled = 1
+function! AirlineInit()
+  if exists('*GTMStatusline')
+    call airline#parts#define_function('gtmstatus', 'GTMStatusline')
+    let g:airline_section_b = airline#section#create([g:airline_section_b, ' ', '[', 'gtmstatus', ']'])
+  endif
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
 "set laststatus=2
 "" air-line
 "let g:airline_powerline_fonts = 1
