@@ -121,12 +121,11 @@ function playFile {
 function playDir {
     OLDIFS=$IFS
     IFS=$'\n'
-    cd "$DIR"
+    cd "$1"
     for file in `eval $CMD | head -n $COUNT`
     do 
     	if [ -d $file -a $RECURSIVE -eq 1 ]; then
-            DIR="$file"
-    		playDir
+    		playDir "$file"
     	elif [ "$file" == "${file%.mp3}" -a "$file" == "${file%.mp4}" -a "$file" == "${file%.mpeg}" -a "$file" == "${file%.flv}" -a "$file" == "${file%.avi}" -a "$file" == "${file%.3gp}" -a "$file" == "${file%.aac}" -a "$file" == "${file%.wmv}" -a "$file" == "${file%.mkv}" ]; then
     		#find . -name "*.mp3" -o -name "*.ogg"
     		continue
@@ -247,8 +246,7 @@ if [ $DIROPT -eq 0 ]; then
     for file in "${array[@]}"
     do
         if [ -d "$file" ]; then
-            DIR="$file"
-            playDir
+            playDir "$file"
     	elif [ "$file" == "${file%.mp3}" -a "$file" == "${file%.mp4}" -a "$file" == "${file%.mpeg}" -a "$file" == "${file%.flv}" -a "$file" == "${file%.avi}" -a "$file" == "${file%.3gp}" -a "$file" == "${file%.aac}" -a "$file" == "${file%.wmv}" -a "$file" == "${file%.mkv}" ]; then
             echo "'$file' nie je audio subor ani priecinok."
             shift
@@ -261,5 +259,5 @@ if [ $DIROPT -eq 0 ]; then
     done
 else
     N=1
-    playDir
+    playDir "$DIR"
 fi

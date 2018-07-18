@@ -1,0 +1,32 @@
+man stty
+info sed
+
+
+alt+.           -- posledny argument posledneho prikazu (premenna $_)
+~+, ~-          -- aktualny / predchadzajuci ($OLDPWD) adresar
+^A, ^E          -- zaciatok / koniec riadku
+^->, ^<-        -- skakanie po celkoch
+^K, ^U          -- zmazanie riadku do konca / do zaciatku
+^W              -- zmazanie slova <-
+^S, ^H
+^T, ^Z, bg, fg
+{PIPESTATUS[@]}
+:&&echo 1 || echoo
+history -ah, PROMPT_COMMAND
+
+
+$((2**2))       -- na druhu
+$((1+08))       -- octalova sustava
+$((1+10#08)), $((2#101))    -- prevod zo sustavy
+$((2#3))
+$((1+(i++)))
+${word:offset:length}
+A="001_in.txt"; echo "${A/in/out}"  -- nahradi 1. vyskyt in za out
+A="001_in.txt"; echo "${A//in/out}" -- nahradi vsetky in za out
+cat <<< "${A//in/out}" 
+cat <<KONEC >aaa    -- spracovava az po KONEC
+
+man echo != help echo --> type echo
+true == :
+declare -p PATH     -- ukaze ako musi byt deklarovana
+set -o vi           -- nastavi skratky v bashi ako vo vi
