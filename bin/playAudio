@@ -259,5 +259,9 @@ if [ $DIROPT -eq 0 ]; then
     done
 else
     N=1
+    OLDIFS=$IFS
+    IFS=$'\n'
+    array=( $(eval $CMD | head -n $COUNT) )
+    IFS=$OLDIFS
     playDir "$DIR"
 fi
