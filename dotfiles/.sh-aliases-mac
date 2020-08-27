@@ -1,0 +1,22 @@
+#!/bin/bash
+
+alias lldb='PATH="/usr/bin:$PATH" lldb'
+
+
+#	==- vim -==
+#alias vi='/Applications/MacVim.app/Contents/MacOS/Vim'
+#alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
+#alias gvi='/Applications/MacVim.app/Contents/MacOS/Vim -g'
+#alias vim='/usr/local/Cellar/vim/7.4.998/bin/vim'
+#alias vim='/Users/ja/bin/mvim'
+
+
+#	==- ine -==
+#alias massif-visualizer='/Applications/MacPorts/KDE4/massif-visualizer.app/Contents/MacOS/massif-visualizer'
+
+
+# Lock the screen (when going AFK)
+alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+
+
+alias imgcat=~/.iterm2/imgcat; alias it2dl=~/.iterm2/it2dl

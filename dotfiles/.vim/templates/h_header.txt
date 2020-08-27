@@ -1,0 +1,21 @@
+:insert
+/**
+ *  @file       filename
+ *  @brief      Brief description
+ *  @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
+ *  @date
+ *   - Created:
+ *   - Edited:
+ *  @version    1.0.0
+ *  @par        gcc:
+ *  @bug
+ *  @todo
+ */
+#ifndef _FILE_H_
+#define _FILE_H_
+
+
+
+#endif  /* _FILE_H_ */
+/* vim: set ts=4 sw=4 tw=0 et :*/
+.
