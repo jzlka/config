@@ -1,0 +1,24 @@
+#   @file       todo.txt
+#   @brief      Brief description
+#   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
+#   @date
+#    - Created: 14.05.2020 23:50
+#    - Edited:  15.05.2020 00:50
+#   @version    1.0.0
+#   @par        VIM: VIM - Vi IMproved 8.2 (2019 Dec 12, compiled May 13 2020 16:28:49)
+#   @bug
+#   @todo
+
+
+
+- resolution was not set
+- right panel was not set
+- running applications are still separated in dock
+- .zshrc was not linked
+  files need to be linked after oh my zsh installation, but during oh my zsh also vim plugins are being installed so it needs to be linked at that time
+- .zsh_history was not linked
+- language was not added
+- nenastavilo zobrazenie skrytych priecinkov
+- nenastavilo finder statusbar atd
+- nenastavilo skryvanie docku
+- ls nie je farebne

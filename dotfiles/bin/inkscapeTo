@@ -1,0 +1,13 @@
+echo "Not a script"
+exit 1
+
+inkscape in.svg -E out.eps --export-ignore-filters --export-ps-level=3
+
+inkscape -D -z --file=in.svg --export-pdf=out.pdf --export-latex
+
+/Applications/Inkscape.app/Contents/MacOS/inkscape  -D --export-type=pdf -o "$PWD/../../text/tests/out.pdf" --export-latex "$PWD/../../text/tests/sorted_performance_final.svg"
+
+/Applications/Inkscape.app/Contents/Resources/bin/inkscape --export-png output.png -w 1024 -h 768 input.svg
+
+inkscape -z input.svg -e output.png -b white
+

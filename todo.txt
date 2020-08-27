@@ -1,0 +1,15 @@
+#   VIM
+-upratat .vimrc
+
+# MUTT
+rozchodit mutt
+
+# SSH
+rozchodit vzdialene pripojenie
+
+# MAIL
+posielat mail s ip po spusteni
+posielat ip po pripojeni cez ssh
+
+# FAIL2BAN
+rozchodit fail2ban honeypot

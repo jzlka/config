@@ -1,0 +1,10 @@
+#/bin/bash
+if [ "$1" == "-h" -o "$1" == "--help" ]; then
+    echo "Skript preraba odkaz na mobilnu https verziu aliexpressu na desktop http adresu"
+    echo "Pouzitie: pri zdielani https v messengeri na androide sa neotvara v aliexpress android aplikacii treba ho prerobit na http"
+fi
+
+for link in "$@"; do
+    echo "$link" | sed -n 's/https:\/\/m\(\.aliexpress\.com\)\/.*\/item\/\(.*\.html\).*/http:\/\/www\1\/item\/-\/\2/p'
+    echo
+done

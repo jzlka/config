@@ -1,0 +1,17 @@
+:insert
+#!/bin/sh
+#   @file       filename
+#   @brief      Brief description
+#   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
+#   @date
+#    - Created:
+#    - Edited:
+#   @version    1.0.0
+#   @par        SHELL:
+#   @bug
+#   @todo
+
+
+
+
+.

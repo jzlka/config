@@ -1,0 +1,198 @@
+## Install and setup Mongodb
+# tap "mongodb/brew"
+# brew "mongodb-community"
+# sudo mkdir -p /System/Volumes/Data/data/db
+# sudo chown -R `id -un` /System/Volumes/Data/data/db
+
+## Install GNU core utilities (those that come with macOS are outdated).
+## Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
+brew "coreutils"
+#ln -s "${BREW_PREFIX}/bin/gsha256sum" "${BREW_PREFIX}/bin/sha256sum"
+
+## Install some other useful utilities like `sponge`.
+#brew "moreutils"
+
+## Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed.
+#brew "findutils"
+
+## Install GNU `sed`, overwriting the built-in `sed`.
+#brew 'gnu-sed'
+
+## Install a modern version of Bash.
+#brew "bash"
+#brew "bash-completion2"
+
+## Switch to using brew-installed bash as default shell
+#if ! fgrep -q "${BREW_PREFIX}/bin/bash" /etc/shells; then
+#  echo "${BREW_PREFIX}/bin/bash" | sudo tee -a /etc/shells;
+#  chsh -s "${BREW_PREFIX}/bin/bash";
+#fi;
+
+## Install GNU 'awk' as gawk
+tap "beeftornado/rmtree"
+brew "gawk"
+
+## Install `wget` with IRI support.
+brew 'wget' #, args: ['', 'with-iri'] #workaround, since Homebrew 2.0 brew does not support install options but there is workaround to call it like `brew install wget -- --with-iri` so thats why the first arg in the array is empty string.
+
+## Install GnuPG to enable PGP-signing commits.
+brew "gnupg"
+
+## Install more recent versions of some macOS tools.
+#brew "grep"
+#brew "openssh"
+#brew "screen"
+#brew "php"
+#brew "gmp"
+#brew "node"
+
+## Install font tools.
+#tap "bramstein/webfonttools"
+#brew "sfnt2woff"
+#brew "sfnt2woff-zopfli"
+#brew "woff2"
+
+## Install some CTF tools; see https://github.com/ctfs/write-ups.
+#brew "aircrack-ng"
+#brew "bfg"
+#brew "binutils"
+#brew "binwalk"
+#brew "cifer"
+#brew "dex2jar"
+#brew "dns2tcp"
+#brew "fcrackzip"
+#brew "foremost"
+#brew "hashpump"
+#brew "john"
+#brew "knock"
+#brew "netpbm"
+#brew "nmap"
+#brew "pngcheck"
+#brew "socat"
+#brew "sqlmap"
+#brew "tcpflow"
+#brew "tcpreplay"
+#brew "tcptrace"
+#brew "ucspi-tcp" # `tcpserver` etc.
+#brew "xpdf"
+#brew "xz"
+brew "hydra"
+
+## Install useful binaries.
+#brew "ack"
+#brew "autojump"
+#brew "git"
+#brew "git-lfs"
+#brew "github/gh/gh"
+#brew "p7zip"
+#brew "pigz"
+#brew "pv"
+#brew "rsync"
+#brew "rename"
+#brew "ssh-copy-id"
+#brew "tree"
+#brew "vbindiff"
+brew "ffmpeg"
+brew "ghostscript"
+brew 'imagemagick' #, args: ['', 'with-webp']
+brew "mas"
+brew "rmtrash"
+brew "tree"
+brew "youtube-dl"
+
+## Install imaging tools
+brew "gnuplot"
+brew "graphviz"
+brew "imagesnap"
+brew "siril"
+brew "sox"
+
+## Install administration tools
+brew "tmux"
+#brew "zmap"
+
+## Install developer tools
+#brew "afl-fuzz"
+#brew "docker"
+#brew "python"
+#brew "valgrind"
+brew "cloc"
+brew "cmake"
+brew "cppcheck"
+brew "cscope"
+brew "doxygen"
+brew "go"
+brew "infer"
+tap "git-time-metric/gtm"
+brew "gtm"
+brew 'qcachegrind' #, args: ['', 'with-graphviz']
+brew "retdec"
+brew 'vim' #, args: ['', 'with-python3']
+
+## Installs Casks
+## Apps I use
+#cask "1password"
+#cask "alfred"
+#cask "audacity"
+#cask "beamer"
+#cask "dash"
+#cask "dropbox"
+#cask "homebrew/cask-versions/firefox-nightly" # Nightly
+#cask "flux"
+#cask "homebrew/cask-versions/google-chrome-canary" # Chrome Canary
+#cask "grammarly"
+#cask "kap"
+#cask "keycastr"
+#cask "mongodb-compass"
+#cask "notion"
+#cask "octave"
+#cask "rectangle"
+#cask "sketch"
+#cask "skitch"
+#cask "slack"
+#cask "textexpander"
+#cask "tex-live-utility"
+#cask "tower"
+#cask "wechat"
+cask "cmake"
+cask "db-browser-for-sqlite"
+cask "fanny"
+cask "firefox"
+cask "gimp"
+cask "google-chrome" #Chrome
+cask "hex-fiend"
+cask "iina"
+cask "inkscape"
+cask "iterm2"
+cask "itsycal"
+cask "keka"
+cask "microsoft-teams"
+cask "oversight"
+cask "packages"
+cask "skype"
+cask "sourcetree"
+cask "spotify"
+cask "steam"
+cask "suspicious-package"
+cask "teamviewer"
+cask "thyme"
+cask "tor-browser"
+cask "tunnelblick"
+cask "virtualbox"
+cask "visual-studio-code"
+cask "vlc"
+cask "wireshark"
+cask "xnviewmp"
+
+## Install apps from App Store
+mas "DaVinci Resolve", id:571213070
+mas "LibreOffice Vanilla", id:921923693
+mas "Messenger", id:1480068668
+mas "Microsoft OneNote", id:784801555
+mas "Microsoft Remote Desktop 10", id:1295203466
+mas "MONIT", id:1014850245
+mas "The Unarchiver", id:425424353
+mas "VOX: MP3 & FLAC Music Player", id:461369673
+mas "Xcode", id:497799835
+mas "XnConvert", id:436203431
+
