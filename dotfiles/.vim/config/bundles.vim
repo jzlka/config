@@ -54,6 +54,9 @@ Plugin 'doums/darcula'
 "
 Plugin 'sjl/badwolf'
 
+"
+Plugin 'vim-scripts/256-jungle'
+
 " Ranbow Parentheses
 Plugin 'luochen1990/rainbow'
 
