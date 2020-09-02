@@ -146,35 +146,36 @@ brew 'vim' #, args: ['', 'with-python3']
 #cask "mongodb-compass"
 #cask "notion"
 #cask "octave"
-#cask "rectangle"
 #cask "sketch"
 #cask "skitch"
 #cask "slack"
 #cask "textexpander"
-#cask "tex-live-utility"
 #cask "tower"
 #cask "wechat"
+#cask "gimp"
+#cask "iina"
+#cask "inkscape"
+#cask "steam"
+#cask "teamviewer"
+#cask "tex-live-utility"
 cask "cmake"
 cask "db-browser-for-sqlite"
 cask "fanny"
 cask "firefox"
-cask "gimp"
 cask "google-chrome" #Chrome
 cask "hex-fiend"
-cask "iina"
-cask "inkscape"
 cask "iterm2"
 cask "itsycal"
 cask "keka"
+#cask "libreoffice"
 cask "microsoft-teams"
 cask "oversight"
 cask "packages"
+cask "rectangle"
 cask "skype"
 cask "sourcetree"
 cask "spotify"
-cask "steam"
 cask "suspicious-package"
-cask "teamviewer"
 cask "thyme"
 cask "tor-browser"
 cask "tunnelblick"
@@ -185,14 +186,14 @@ cask "wireshark"
 cask "xnviewmp"
 
 ## Install apps from App Store
-mas "DaVinci Resolve", id:571213070
-mas "LibreOffice Vanilla", id:921923693
-mas "Messenger", id:1480068668
+#mas "DaVinci Resolve", id:571213070
+#mas "MONIT", id:1014850245
+#mas "VOX: MP3 & FLAC Music Player", id:461369673
+#mas "Messenger", id:1480068668
+#mas "LibreOffice Vanilla", id:921923693
 mas "Microsoft OneNote", id:784801555
 mas "Microsoft Remote Desktop 10", id:1295203466
-mas "MONIT", id:1014850245
 mas "The Unarchiver", id:425424353
-mas "VOX: MP3 & FLAC Music Player", id:461369673
 mas "Xcode", id:497799835
 mas "XnConvert", id:436203431
 
