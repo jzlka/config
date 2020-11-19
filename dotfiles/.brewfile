@@ -127,6 +127,7 @@ tap "git-time-metric/gtm"
 brew "gtm"
 brew 'qcachegrind' #, args: ['', 'with-graphviz']
 brew "retdec"
+brew "smimesign"
 brew 'vim' #, args: ['', 'with-python3']
 
 ## Installs Casks
@@ -158,6 +159,7 @@ cask "cmake"
 cask "db-browser-for-sqlite"
 cask "fanny"
 cask "firefox"
+#cask "ghidra"
 cask "gimp"
 cask "google-chrome" #Chrome
 cask "hex-fiend"
