@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  10.04.2020 16:30
+#    - Edited:  19.11.2020 23:36
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -30,7 +30,6 @@ echo "DaisyDisk"
 echo "EaseUS Data Recovery"
 echo "EtreCheckPro"
 echo "File Buddy"
-echo "Firefox"
 echo "Google Earth"
 echo "Hopper Disassembler"
 echo "IDA Freeware"
@@ -47,7 +46,6 @@ echo "Synalize It! Pro"
 echo "Texpad"
 #echo "tn3270 X.app"
 echo "Topaz"
-echo "TorBrowser"
 echo "Tuxera ntfs"
 echo "uTorrent"
 
