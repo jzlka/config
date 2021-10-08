@@ -9,7 +9,7 @@ do
     format="mp3"
     options="-vn -acodec copy"
     name="$(echo $file | rev | cut -d'.' -f2- | rev)"
-    bitrate=`ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | sed "s/.*, \([[:digit:]][[:digit:]]*\)[^,]*kb\/s.*/\1/g"`
+    bitrate=`ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:.*kb/s" | sed "s/.*, \([[:digit:]][[:digit:]]*\)[^,]*kb\/s.*/\1/g"`
     echo;
     echo;
     echo "-==- Processing file: $file -==-"
@@ -22,9 +22,15 @@ do
 
     printf "*** Choose output format [aac/MP3]: "
     read -t 10 format
-    if [ "$format" == "mp3" ]; then
-        printf "set bitrate: "
+    if [ "$format" == "mp3" -o -z "$format" ]; then
+        if [ -z "$bitrate" ]; then
+            bitrate=320
+        fi
+
+        printf "set bitrate [$bitrate]: "
         read bitrate
+        bitrate=${bitrate:-320}
+        format="mp3"
         options="-vn -ab ${bitrate}k -f $format"
     else
         format="aac"
