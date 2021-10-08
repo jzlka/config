@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  22.06.2021 13:18
+#    - Edited:  30.06.2021 09:34
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -306,6 +306,8 @@ sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutio
 
 # Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
 defaults write com.apple.finder QuitMenuItem -bool true
+
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
 
 # Finder: disable window animations and Get Info animations
 #defaults write com.apple.finder DisableAllAnimations -bool true
