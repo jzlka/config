@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  16.12.2021 16:56
+#    - Edited:  16.12.2021 18:49
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -13,6 +13,9 @@
 xcode-select --install
 echo "Wait for installation to finish. Then press any key to continue.."
 read x
+
+echo "Accepting Xcode license"
+sudo xcodebuild -license accept
 
 echo -n "Do you want to install Rosetta 2? [Y/n] "
 read x
