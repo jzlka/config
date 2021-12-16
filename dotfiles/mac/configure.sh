@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  21.06.2021 13:31
+#    - Edited:  16.12.2021 18:56
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -27,8 +27,8 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/th
 echo "# Import presets to iterm2"
 TMP_DIR=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 8 | head -n 1)
 mkdir ~/Downloads/"$TMP_DIR"
-git clone https://github.com/mbadolato/iTerm2-Color-Schemes ~/Downloads/"$TMP_DIR/"
-echo "iTerm2 presets need to be installed manually. You can find them in ~/Downloads/$TMP_DIR/iTerm2-Color-Schemes/schemes"
+git clone https://github.com/mbadolato/iTerm2-Color-Schemes "~/Downloads/$TMP_DIR/"
+echo "iTerm2 presets need to be installed manually. You can find them in ~/Downloads/$TMP_DIR/schemes"
 echo -n "Continue?"
 read x
 rm -rf ~/Downloads/"$TMP_DIR"

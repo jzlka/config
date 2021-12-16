@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  21.06.2021 13:43
+#    - Edited:  16.12.2021 18:52
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -33,7 +33,6 @@ echo "File Buddy"
 echo "Google Earth"
 echo "Hopper Disassembler"
 echo "IDA Freeware"
-echo "IINA"
 echo "LRTimelapse 5"
 echo "Latex"
 echo "Lingon X"
