@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  16.12.2021 19:06
+#    - Edited:  16.12.2021 19:35
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -55,8 +55,13 @@ vim -N -u ~/.vim/config/bundles.vim +PluginInstall +quitall
 echo -n "Print any key to continue "
 read x
 dir="~/.vim/bundle/YouCompleteMe"
+
 echo "Installing YouCompleteMe"
-[ -r "$dir" ] && [ -d "$dir" ] && cd "$dir" && "install.py --clangd-completer" && cd -
+if [ -r "$dir" ] && [ -d "$dir" ]; then
+    pushd "$dir"
+    "install.py --clangd-completer"
+    popd
+fi
 echo -n "Print any key to continue "
 read x
 unset dir
