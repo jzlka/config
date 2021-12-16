@@ -175,7 +175,7 @@ cask "microsoft-teams"
 cask "mounty"
 cask "oversight"
 cask "packages"
-cask "pock"
+#cask "pock" # Not needed for 2021 MB Pro
 cask "rectangle"
 cask "skype"
 cask "sourcetree"
