@@ -2,7 +2,7 @@
 
 #	*** Variables ***
 export EDITOR="vim"
-export PATH="/Library/Frameworks/Mono.framework/Versions/Current/Commands:$(brew --prefix coreutils)/libexec/gnubin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/opt/local/bin:/opt/local/sbin:$PATH:/usr/local/go/bin/"
+export PATH="/Library/Frameworks/Mono.framework/Versions/Current/Commands:$(brew --prefix coreutils)/libexec/gnubin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/opt/local/bin:/opt/local/sbin:$PATH:/usr/local/go/bin/:$HOME/.dotnet/tools"
 
 # Define some colors
 txtblk='\e[0;30m' # Black - Regular
