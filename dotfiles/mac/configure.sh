@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  16.12.2021 18:56
+#    - Edited:  16.12.2021 19:06
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -55,9 +55,8 @@ vim -N -u ~/.vim/config/bundles.vim +PluginInstall +quitall
 echo -n "Print any key to continue "
 read x
 dir="~/.vim/bundle/YouCompleteMe"
-echo -n "Installing YouCompleteMe"
-[ -r "$dir" ] && [ -d "$dir" ] && cd "$dir" && "install.py --clangd-completer"
-cd -
+echo "Installing YouCompleteMe"
+[ -r "$dir" ] && [ -d "$dir" ] && cd "$dir" && "install.py --clangd-completer" && cd -
 echo -n "Print any key to continue "
 read x
 unset dir
@@ -65,7 +64,7 @@ unset dir
 
 CONFIG=config
 echo "## Add slovak language spell checking"
-ln -s "${CONFIG}"/misc/hunspell-sk-20110228/sk_SK.* Library/Spelling/
+ln -s "${CONFIG}"/misc/hunspell-sk-20110228/sk_SK.* ~/Library/Spelling/
 
 echo "## Make some usefull symlinks"
 ln -s "${PWD}/${CONFIG}/konfiguracia.txt" ~/
