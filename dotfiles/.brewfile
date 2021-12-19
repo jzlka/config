@@ -96,6 +96,7 @@ brew "ffmpeg"
 brew "ghostscript"
 brew 'imagemagick' #, args: ['', 'with-webp']
 brew "mas"
+brew "pinentry-mac"
 brew "rmtrash"
 brew "tree"
 brew "youtube-dl"
