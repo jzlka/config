@@ -160,6 +160,7 @@ brew 'vim' #, args: ['', 'with-python3']
 #cask "tex-live-utility"
 #cask "cmake"
 cask "adobe-acrobat-reader"
+cask "balenaetcher"
 cask "db-browser-for-sqlite"
 cask "drawio"
 cask "fanny"
