@@ -128,6 +128,7 @@ brew "gtm"
 brew 'qcachegrind' #, args: ['', 'with-graphviz']
 brew "retdec"
 brew 'vim' #, args: ['', 'with-python3']
+brew "wireguard-tools"
 
 ## Installs Casks
 ## Apps I use
