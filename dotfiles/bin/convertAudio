@@ -15,7 +15,7 @@ do
     echo "-==- Processing file: $file -==-"
     if [ ! -r "$file" ]; then
         echo "File '$file' either does not exists or is not readable."
-	continue
+        continue
     fi
 
     ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | grep --color -e "Audio: [^ ]* " -e "\d* kb/s"
@@ -28,8 +28,8 @@ do
         fi
 
         printf "set bitrate [$bitrate]: "
-        read bitrate
-        bitrate=${bitrate:-320}
+        read bitrateRead
+        bitrate=${bitrateRead:-$bitrate}
         format="mp3"
         options="-vn -ab ${bitrate}k -f $format"
     else
