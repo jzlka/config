@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  19.11.2020 23:36
+#    - Edited:  16.12.2021 19:35
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -27,8 +27,8 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/th
 echo "# Import presets to iterm2"
 TMP_DIR=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 8 | head -n 1)
 mkdir ~/Downloads/"$TMP_DIR"
-git clone https://github.com/mbadolato/iTerm2-Color-Schemes "~/Downloads/$TMP_DIR/iTerm2-Color-Schemes"
-echo "iTerm2 presets need to be installed manually. You can find them in ~/Downloads/$TMP_DIR/iTerm2-Color-Schemes/schemes"
+git clone https://github.com/mbadolato/iTerm2-Color-Schemes "~/Downloads/$TMP_DIR/"
+echo "iTerm2 presets need to be installed manually. You can find them in ~/Downloads/$TMP_DIR/schemes"
 echo -n "Continue?"
 read x
 rm -rf ~/Downloads/"$TMP_DIR"
@@ -48,16 +48,20 @@ popd
 
 echo "## Install vim plugins"
 echo "Installing latest vundle bundle..."
-rm -fr "${HOME}/.vim/bundle/Vundle.vim" 2>/dev/null
-git clone https://github.com/VundleVim/Vundle.vim.git "${HOME}/.vim/bundle/Vundle.vim"
+rm -fr ~/.vim/bundle/Vundle.vim 2>/dev/null
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 echo "Installing other vim bundles..."
-vim -N -u "${HOME}/.vim/config/bundles.vim" +PluginInstall +quitall
+vim -N -u ~/.vim/config/bundles.vim +PluginInstall +quitall
 echo -n "Print any key to continue "
 read x
 dir="~/.vim/bundle/YouCompleteMe"
-echo -n "Installing YouCompleteMe"
-[ -r "$dir" ] && [ -d "$dir" ] && cd "$dir" && "install.py --clangd-completer"
-cd -
+
+echo "Installing YouCompleteMe"
+if [ -r "$dir" ] && [ -d "$dir" ]; then
+    pushd "$dir"
+    "install.py --clangd-completer"
+    popd
+fi
 echo -n "Print any key to continue "
 read x
 unset dir
@@ -65,14 +69,14 @@ unset dir
 
 CONFIG=config
 echo "## Add slovak language spell checking"
-ln -s "${CONFIG}"/misc/hunspell-sk-20110228/sk_SK.* Library/Spelling/
+ln -s "${CONFIG}"/misc/hunspell-sk-20110228/sk_SK.* ~/Library/Spelling/
 
 echo "## Make some usefull symlinks"
-ln -s "${PWD}/${CONFIG}/konfiguracia.txt" "${HOME}/"
-ln -s "${PWD}/${CONFIG}/arch_prikazy.txt" "${HOME}/"
-sudo ditto "${PWD}/${CONFIG}/"home/Library/Developer/Xcode/Templates/* "${HOME}/"Library/Developer/Xcode/Templates/
+ln -s "${PWD}/${CONFIG}/konfiguracia.txt" ~/
+ln -s "${PWD}/${CONFIG}/arch_prikazy.txt" ~/
+sudo ditto "${PWD}/${CONFIG}/"home/Library/Developer/Xcode/Templates/* ~/Library/Developer/Xcode/Templates/
 sudo cp "${PWD}/${CONFIG}/"root/etc/hosts /etc/hosts
 
-echo "## Hide an account"
+#echo "## Hide an account"
 # https://support.apple.com/en-us/HT203998
 #sudo dscl . create /Users/ja IsHidden 1

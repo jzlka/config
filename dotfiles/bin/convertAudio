@@ -1,30 +1,36 @@
 #!/bin/bash
 # TODO ked je v nazve $ berie to terminal ako premennu (uz pri spustani afplay)
-#TODO upravit vypis po prerobeni 
+#TODO upravit vypis po prerobeni
 # Author: Jozef Zuzelka
 
 IFS=$'\n'
 for file in "$@"
 do
-    format="aac"
+    format="mp3"
     options="-vn -acodec copy"
     name="$(echo $file | rev | cut -d'.' -f2- | rev)"
-    bitrate=`ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | sed "s/.*, \([[:digit:]][[:digit:]]*\)[^,]*kb\/s.*/\1/g"`
-    echo; 
+    bitrate=`ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:.*kb/s" | sed "s/.*, \([[:digit:]][[:digit:]]*\)[^,]*kb\/s.*/\1/g"`
+    echo;
     echo;
     echo "-==- Processing file: $file -==-"
     if [ ! -r "$file" ]; then
         echo "File '$file' either does not exists or is not readable."
-	continue
+        continue
     fi
-    
+
     ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | grep --color -e "Audio: [^ ]* " -e "\d* kb/s"
-    
-    printf "*** Choose output format [AAC/mp3]: "
+
+    printf "*** Choose output format [aac/MP3]: "
     read -t 10 format
-    if [ "$format" == "mp3" ]; then
-        printf "set bitrate: "
-        read bitrate
+    if [ "$format" == "mp3" -o -z "$format" ]; then
+        if [ -z "$bitrate" ]; then
+            bitrate=320
+        fi
+
+        printf "set bitrate [$bitrate]: "
+        read bitrateRead
+        bitrate=${bitrateRead:-$bitrate}
+        format="mp3"
         options="-vn -ab ${bitrate}k -f $format"
     else
         format="aac"

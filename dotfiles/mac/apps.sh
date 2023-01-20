@@ -1,10 +1,8 @@
 #!/bin/sh
 #   @file       apps.sh
-#   @brief      Brief description
-#   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  19.11.2020 23:36
+#    - Edited:  20.01.2023 14:12
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -30,6 +28,8 @@ echo "DaisyDisk"
 echo "EaseUS Data Recovery"
 echo "EtreCheckPro"
 echo "File Buddy"
+echo "Free Download Manager"
+echo "Google Drive"
 echo "Google Earth"
 echo "Hopper Disassembler"
 echo "IDA Freeware"
@@ -48,5 +48,7 @@ echo "Texpad"
 echo "Topaz"
 echo "Tuxera ntfs"
 echo "uTorrent"
+echo "Visual Studio"
+echo "VNC Viewer"
 
 
