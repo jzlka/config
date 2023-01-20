@@ -2,7 +2,7 @@
 #   @file       apps.sh
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  20.01.2023 14:06
+#    - Edited:  20.01.2023 14:12
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -43,7 +43,6 @@ echo "Parallels"
 echo "Photomatix Pro 6"
 echo "Sublime Text"
 echo "Synalize It! Pro"
-echo "TeamViewer"
 echo "Texpad"
 #echo "tn3270 X.app"
 echo "Topaz"
