@@ -33,7 +33,7 @@ tap "beeftornado/rmtree"
 brew "gawk"
 
 ## Install `wget` with IRI support.
-brew 'wget' #, args: ['', 'with-iri'] #workaround, since Homebrew 2.0 brew does not support install options but there is workaround to call it like `brew install wget -- --with-iri` so thats why the first arg in the array is empty string.
+brew "wget" #, args: ['', 'with-iri'] #workaround, since Homebrew 2.0 brew does not support install options but there is workaround to call it like `brew install wget -- --with-iri` so thats why the first arg in the array is empty string.
 
 ## Install GnuPG to enable PGP-signing commits.
 brew "gnupg"
@@ -44,13 +44,16 @@ brew "gnupg"
 #brew "screen"
 #brew "php"
 #brew "gmp"
-#brew "node"
+brew "node"
 
 ## Install font tools.
 #tap "bramstein/webfonttools"
 #brew "sfnt2woff"
 #brew "sfnt2woff-zopfli"
 #brew "woff2"
+
+## GUI Customization
+#brew "adwaita-icon-theme"
 
 ## Install some CTF tools; see https://github.com/ctfs/write-ups.
 #brew "aircrack-ng"
@@ -66,7 +69,7 @@ brew "gnupg"
 #brew "john"
 #brew "knock"
 #brew "netpbm"
-#brew "nmap"
+brew "nmap"
 #brew "pngcheck"
 #brew "socat"
 #brew "sqlmap"
@@ -94,7 +97,7 @@ brew "hydra"
 #brew "vbindiff"
 brew "ffmpeg"
 brew "ghostscript"
-brew 'imagemagick' #, args: ['', 'with-webp']
+brew "imagemagick" #, args: ['', 'with-webp']
 brew "mas"
 brew "trash"
 brew "tree"
@@ -125,9 +128,10 @@ brew "go"
 brew "infer"
 tap "git-time-metric/gtm"
 brew "gtm"
-brew 'qcachegrind' #, args: ['', 'with-graphviz']
+brew "qcachegrind" #, args: ['', 'with-graphviz']
 brew "retdec"
-brew 'vim' #, args: ['', 'with-python3']
+brew "swiftlint"
+brew "vim" #, args: ['', 'with-python3']
 brew "wireguard-tools"
 
 ## Installs Casks
@@ -156,7 +160,7 @@ brew "wireguard-tools"
 #cask "gimp"
 #cask "iina"
 #cask "inkscape"
-#cask "steam"
+cask "steam"
 #cask "teamviewer"
 #cask "tex-live-utility"
 #cask "cmake"
@@ -167,7 +171,7 @@ cask "drawio"
 cask "fanny"
 cask "firefox"
 cask "google-chrome" #Chrome
-cask "hex-fiend"
+#cask "hex-fiend"
 cask "iina"
 cask "iterm2"
 cask "itsycal"
@@ -200,17 +204,18 @@ cask "xnviewmp"
 #mas "MONIT", id:1014850245
 #mas "VOX: MP3 & FLAC Music Player", id:461369673
 #mas "LibreOffice Vanilla", id:921923693
+mas "AdGuard for Safari", id:1440147259
+mas "Disk Space Analyzer Free", id:446243721
+mas "Grammarly for Safari", id:1462114288
+mas "Hex Fiend", id:1342896380
+mas "Messenger", id:1480068668
+mas "Microsoft Excel", id:462058435
 mas "Microsoft OneNote", id:784801555
+mas "Microsoft Outlook", id:985367838
+mas "Microsoft PowerPoint", id:462062816
 mas "Microsoft Remote Desktop 10", id:1295203466
+mas "Microsoft Word", id:462054704
 mas "The Unarchiver", id:425424353
+mas "WireGuard", id:1451685025
 mas "Xcode", id:497799835
 mas "XnConvert", id:436203431
-mas "Messenger", id:1480068668
-mas "AdGuard for Safari", id:1440147259
-mas "Microsoft Outlook", id:985367838
-mas "Microsoft Word", id:462054704
-mas "Microsoft Excel", id:462058435
-mas "Microsoft PowerPoint", id:462062816
-mas "Hex Fiend", id:1342896380
-mas "Grammarly for Safari", id:1462114288
-mas "WireGuard", id:1451685025
