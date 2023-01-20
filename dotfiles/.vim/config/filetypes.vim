@@ -45,7 +45,7 @@ autocmd bufnewfile *.py exe 9."s/\\(Python:\\)/\\1 ".system('python --version 2>
 autocmd bufnewfile Makefile exe 8."s/\\(make:\\)/\\1 ".system('make --version 2>&1 | head -n1')[:-2]|$
 autocmd bufnewfile *.txt exe 8."s/\\(VIM:\\)/\\1 ".system('vim --version 2>&1 | head -n1')[:-2]|$
 
-let updateCustomHeader = 1
+let updateCustomHeader = 0
 
 if (updateCustomHeader == 1)
     autocmd Bufwritepre,filewritepre *.{c,cpp,cs,h,hpp,tpp,sh,py,m,mm,txt},Makefile execute "normal ma"

@@ -72,3 +72,5 @@ export GPG_TTY=$TTY;
 
 export HOMEBREW_BREWFILE=~/.brewfile
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
+export GPG_TTY=$(tty)

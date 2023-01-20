@@ -2,7 +2,7 @@
 /**
  *  @file       filename
  *  @brief      Brief description
- *  @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
+ *  @author     Jozef Zuzelka
  *  @date
  *   - Created:
  *   - Edited:

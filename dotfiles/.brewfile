@@ -99,6 +99,7 @@ brew "ffmpeg"
 brew "ghostscript"
 brew "imagemagick" #, args: ['', 'with-webp']
 brew "mas"
+brew "pinentry-mac"
 brew "trash"
 brew "tree"
 brew "youtube-dl"
@@ -130,6 +131,7 @@ tap "git-time-metric/gtm"
 brew "gtm"
 brew "qcachegrind" #, args: ['', 'with-graphviz']
 brew "retdec"
+brew "smimesign"
 brew "swiftlint"
 brew "vim" #, args: ['', 'with-python3']
 brew "wireguard-tools"
@@ -165,6 +167,7 @@ cask "db-browser-for-sqlite"
 cask "drawio"
 cask "fanny"
 cask "firefox"
+#cask "ghidra"
 cask "gimp"
 cask "google-chrome" #Chrome
 #cask "hex-fiend"
