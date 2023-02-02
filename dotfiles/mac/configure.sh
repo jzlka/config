@@ -27,7 +27,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/th
 echo "# Import presets to iterm2"
 TMP_DIR=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 8 | head -n 1)
 mkdir ~/Downloads/"$TMP_DIR"
-git clone https://github.com/mbadolato/iTerm2-Color-Schemes "~/Downloads/$TMP_DIR/"
+git clone https://github.com/mbadolato/iTerm2-Color-Schemes ~/Downloads/"$TMP_DIR/"
 echo "iTerm2 presets need to be installed manually. You can find them in ~/Downloads/$TMP_DIR/schemes"
 echo -n "Continue?"
 read x
@@ -76,6 +76,9 @@ ln -s "${PWD}/${CONFIG}/konfiguracia.txt" ~/
 ln -s "${PWD}/${CONFIG}/arch_prikazy.txt" ~/
 sudo ditto "${PWD}/${CONFIG}/"home/Library/Developer/Xcode/Templates/* ~/Library/Developer/Xcode/Templates/
 sudo cp "${PWD}/${CONFIG}/"root/etc/hosts /etc/hosts
+
+echo "## oh-my-zsh probably overwritten our zshrc. Fix it"
+ln -sf "$PWD/dotfiles/.zshrc" "$HOME"
 
 #echo "## Hide an account"
 # https://support.apple.com/en-us/HT203998

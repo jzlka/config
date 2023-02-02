@@ -28,14 +28,15 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ###############################################################################
 
 # Set computer name (as done via System Preferences → Sharing)
-sudo scutil --set ComputerName "MBPJ-S"
-sudo scutil --set HostName "MBPJ-S"
-sudo scutil --set LocalHostName "MBPJ-S"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "MBPJ-S"
+PCNAME="MBPJ-T"
+sudo scutil --set ComputerName "$PCNAME"
+sudo scutil --set HostName "$PCNAME"
+sudo scutil --set LocalHostName "$PCNAME"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$PCNAME"
 sudo dscacheutil -flushcache
 sudo systemsetup -setremotelogin on
-#sudo systemsetup -setcomputername MBPJ-S
-#sudo networksetup -setcomputername MBPJ-S
+#sudo systemsetup -setcomputername "$PCNAME"
+#sudo networksetup -setcomputername "$PCNAME"
 
 ## Disable the sound effects on boot
 #sudo nvram SystemAudioVolume=" "
@@ -772,6 +773,8 @@ open "${PWD}/dotfiles/mac/iterm/Night Owl.itermcolors"
 #defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
 defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool true
+defaults write com.googlecode.iterm2 DisableFullscreenTransparency -bool true
+defaults write com.googlecode.iterm2 AlternateMouseScroll -bool false
 
 ###############################################################################
 # Time Machine                                                                #
@@ -975,3 +978,8 @@ for app in "Activity Monitor" \
 	sudo killall -9 "${app}" &> /dev/null
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
+
+echo "Manual settings needed: "
+echo "iTerm2:"
+echo "  * Unlimited scrollback"
+echo "  * Non-ASCII font"
