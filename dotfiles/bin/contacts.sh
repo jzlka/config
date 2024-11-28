@@ -1,1 +1,0 @@
-private/contacts.sh

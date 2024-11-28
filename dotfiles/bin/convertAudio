@@ -1,33 +1,71 @@
 #!/bin/bash
 # TODO ked je v nazve $ berie to terminal ako premennu (uz pri spustani afplay)
-#TODO upravit vypis po prerobeni 
+#TODO upravit vypis po prerobeni
 # Author: Jozef Zuzelka
+
+usage() {
+cat << EOF
+    Usage: $0 [options] file1 [file2]...
+    Options:
+        --format {mp3|aac} [$FORMAT]
+        --bitrate BITRATE|max [$BITRATE]
+        --output DIR [$OUTPUT]
+EOF
+    exit 0
+}
+
+FORMAT="mp3"
+BITRATE="320"
+OUTPUT="$PWD"
+
+while true; do
+    case "$1" in
+        --help)
+            usage;;
+        --format)
+            shift
+            FORMAT="$1";;
+        --bitrate)
+            shift
+            BITRATE="$1";;
+        --output)
+            shift
+            OUTPUT="$1";;
+        *)
+            break;;
+    esac
+    shift
+done
+
+if [[ "$FORMAT" != "mp3" && "$FORMAT" != "aac" ]]; then
+    echo "Invalid format specified!"
+    usage
+fi
 
 IFS=$'\n'
 for file in "$@"
 do
-    format="aac"
     options="-vn -acodec copy"
     name="$(echo $file | rev | cut -d'.' -f2- | rev)"
-    bitrate=`ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | sed "s/.*, \([[:digit:]][[:digit:]]*\)[^,]*kb\/s.*/\1/g"`
-    echo; 
-    echo;
-    echo "-==- Processing file: $file -==-"
+    bitrate=`ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:.*kb/s" | sed "s/.*, \([[:digit:]][[:digit:]]*\)[^,]*kb\/s.*/\1/g"`
+    if [[ "$BITRATE" != "max" ]]; then
+        bitrate="$BITRATE"
+    fi
+
+    echo -e "\n\n-==- Processing file: $file -==-"
     if [ ! -r "$file" ]; then
-        echo "File '$file' either does not exists or is not readable."
-	continue
+        echo "File '$file' either does not exist or is not readable."
+        continue
     fi
-    
+
+    echo "Input:"
     ffmpeg -i "$file" -hide_banner 2>&1 | grep ": Audio:" | grep --color -e "Audio: [^ ]* " -e "\d* kb/s"
-    
-    printf "*** Choose output format [AAC/mp3]: "
-    read -t 10 format
-    if [ "$format" == "mp3" ]; then
-        printf "set bitrate: "
-        read bitrate
-        options="-vn -ab ${bitrate}k -f $format"
-    else
-        format="aac"
+
+    if [ "$FORMAT" == "mp3" ]; then
+        options="-vn -ab ${bitrate}k -f $FORMAT"
     fi
-    eval ffmpeg -i \"$file\" -hide_banner "$options" \"${name}_[$bitrate]_CA.$format\"
+    OUTPUT_FILE="${OUTPUT}/${name}_[$bitrate]_CA.$FORMAT"
+    eval ffmpeg -i \"$file\" -hide_banner "$options" \"$OUTPUT_FILE\" 2\> /dev/null
+    echo "Output:"
+    ffmpeg -i "$OUTPUT_FILE" -hide_banner 2>&1 | grep ": Audio:" | grep --color -e "Audio: [^ ]* " -e "\d* kb/s"
 done

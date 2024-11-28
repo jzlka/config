@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  14.05.2020 23:44
+#    - Edited:  30.06.2021 09:34
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -28,14 +28,15 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ###############################################################################
 
 # Set computer name (as done via System Preferences → Sharing)
-sudo scutil --set ComputerName "MBPJ"
-sudo scutil --set HostName "MBPJ"
-sudo scutil --set LocalHostName "MBPJ"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "MBPJ"
+PCNAME="MBPJ-T"
+sudo scutil --set ComputerName "$PCNAME"
+sudo scutil --set HostName "$PCNAME"
+sudo scutil --set LocalHostName "$PCNAME"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$PCNAME"
 sudo dscacheutil -flushcache
 sudo systemsetup -setremotelogin on
-#sudo systemsetup -setcomputername MBPJ
-#sudo networksetup -setcomputername MBPJ
+#sudo systemsetup -setcomputername "$PCNAME"
+#sudo networksetup -setcomputername "$PCNAME"
 
 ## Disable the sound effects on boot
 #sudo nvram SystemAudioVolume=" "
@@ -56,6 +57,7 @@ defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
 # Showing scrollbars
 # Possible values: `WhenScrolling`, `Automatic` and `Always`
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
+defaults write NSGlobalDomain AppleScrollerPagingBehavior -bool true
 
 # Disable the over-the-top focus ring animation
 defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
@@ -75,7 +77,7 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
 # Disable the “Are you sure you want to open this application?” dialog
-#defaults write com.apple.LaunchServices LSQuarantine -bool false
+defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # Remove duplicates in the “Open With” menu (also see `lscleanup` alias)
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
@@ -84,8 +86,10 @@ defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 # Try e.g. `cd /tmp; unidecode "\x{0000}" > cc.txt; open -e cc.txt`
 # defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
 
-# Disable Resume system-wide
-#defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
+# Enable Resume system-wide
+#defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool true
+defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool true
+defaults write NSGlobalDomain NSCloseAlwaysConfirmsChanges -bool true
 
 # Disable automatic termination of inactive apps
 #defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
@@ -122,6 +126,8 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticTextCompletionEnabled -bool true
+defaults write NSGlobalDomain WebAutomaticSpellingCorrectionEnabled -bool false
 
 # Set a custom wallpaper image. `DefaultDesktop.jpg` is already a symlink, and
 # all wallpapers are in `/Library/Desktop Pictures/`. The default is `Wave.jpg`.
@@ -162,6 +168,8 @@ sudo pmset -a hibernatemode 0
 # Disable “natural” (Lion-style) scrolling
 #defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
+defaults write NSGlobalDomain com.apple.trackpad.scaling -real 1
+
 # Increase sound quality for Bluetooth headphones/headsets
 # https://smarterco.de/mac-os-choppy-audio-over-bluetooth-with-bose-quietcomfort-35/
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Max (editable)" -int 80
@@ -189,7 +197,7 @@ defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
 # 1 => 15ms
 # 10 => 150ms
 # https://apple.stackexchange.com/questions/10467/how-to-increase-keyboard-key-repeat-rate-on-os-x
-defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # Set language and text formats
@@ -200,6 +208,8 @@ defaults write NSGlobalDomain AppleLocale -string "sk_SK@currency=EUR"
 defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
 defaults write NSGlobalDomain AppleMetricUnits -bool true
 defaults write NSGlobalDomain NSLinguisticDataAssetsRequested -array "sk_SK" "en" "en_SK" "en_US" "en_GB"
+
+# Turn on sound beep when level changed
 defaults write NSGlobalDomain  com.apple.sound.beep.feedback -int 1
 defaults write NSGlobalDomain  com.apple.sound.beep.flash -int 0
 
@@ -209,6 +219,14 @@ defaults write com.apple.HIToolbox AppleEnabledInputSources -array-add '<dict><k
 defaults write com.apple.HIToolbox AppleEnabledInputSources -array-add '<dict><key>InputSourceKind</key><string>Keyboard Layout</string><key>KeyboardLayout ID</key><integer>0</integer><key>KeyboardLayout Name</key><string>U.S.</string></dict>'
 defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '<dict><key>InputSourceKind</key><string>Keyboard Layout</string><key>KeyboardLayout ID</key><integer>0</integer><key>KeyboardLayout Name</key><string>U.S.</string></dict>'
 
+defaults write com.apple.TextInputMenu visible -bool true
+defaults write com.apple.TextInputMenuAgent "NSStatusItem Visible Item-0" -bool true
+defaults write com.apple.controlcenter "NSStatusItem Visible Bluetooth" -bool true
+defaults write com.apple.controlcenter "NSStatusItem Visible Sound" -bool true
+defaults write com.apple.controlcenter "NSStatusItem Visible DoNotDisturb" -bool false
+defaults write com.apple.controlcenter "NSStatusItem Visible NSStatusItem Visible Item-5" -bool false
+defaults write com.apple.controlcenter "NSStatusItem Visible NSStatusItem Visible Item-5" -bool false
+defaults write com.apple.controlcenter "NSStatusItem Visible NSStatusItem Visible Item-7" -bool false
 
 # Show language menu in the top right corner of the boot screen
 sudo defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bool true
@@ -217,7 +235,7 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bo
 sudo systemsetup -settimezone "Europe/Bratislava" > /dev/null
 
 # Stop iTunes from responding to the keyboard media keys
-launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
+#launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
 
 ###############################################################################
 # Energy saving                                                               #
@@ -290,6 +308,8 @@ sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutio
 # Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
 defaults write com.apple.finder QuitMenuItem -bool true
 
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
+
 # Finder: disable window animations and Get Info animations
 #defaults write com.apple.finder DisableAllAnimations -bool true
 
@@ -346,9 +366,9 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 #defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
 
 # Automatically open a new Finder window when a volume is mounted
-#defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
-#defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
-#defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
+defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
+defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
+defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
 
 # Show item info near icons on the desktop and in other icon views
 #/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
@@ -428,10 +448,10 @@ defaults write com.apple.dock show-process-indicators -bool true
 #defaults write com.apple.dock persistent-apps -array
 
 # Show only open applications in the Dock
-defaults write com.apple.dock static-only -bool true
+#defaults write com.apple.dock static-only -bool true
 
-# Don’t animate opening applications from the Dock
-#defaults write com.apple.dock launchanim -bool false
+# Animate opening applications from the Dock
+defaults write com.apple.dock launchanim -bool true
 
 # Speed up Mission Control animations
 defaults write com.apple.dock expose-animation-duration -float 0.1
@@ -448,7 +468,7 @@ defaults write com.apple.dashboard mcx-disabled -bool true
 defaults write com.apple.dock dashboard-in-overlay -bool true
 
 # Don’t automatically rearrange Spaces based on most recent use
-defaults write com.apple.dock mru-spaces -bool false
+#defaults write com.apple.dock mru-spaces -bool false
 
 # Remove the auto-hiding Dock delay
 defaults write com.apple.dock autohide-delay -float 0
@@ -464,8 +484,8 @@ defaults write com.apple.dock autohide -bool true
 # Don’t show recent applications in Dock
 defaults write com.apple.dock show-recents -bool false
 
-# Disable the Launchpad gesture (pinch with thumb and three fingers)
-#defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
+# Enable the Launchpad gesture (pinch with thumb and three fingers)
+defaults write com.apple.dock showLaunchpadGestureEnabled -int 1
 
 # Reset Launchpad, but keep the desktop wallpaper intact
 #find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete
@@ -534,8 +554,8 @@ defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
 # Allow hitting the Backspace key to go to the previous page in history
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled -bool true
 
-# Hide Safari’s bookmarks bar by default
-defaults write com.apple.Safari ShowFavoritesBar -bool false
+# Show Safari’s bookmarks bar by default
+defaults write com.apple.Safari ShowFavoritesBar -bool true
 
 # Hide Safari’s sidebar in Top Sites
 defaults write com.apple.Safari ShowSidebarInTopSites -bool false
@@ -620,7 +640,7 @@ defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending
 defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
 
 # Disable inline attachments (just show the icons)
-#defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
+defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
 
 # Disable automatic spell checking
 #defaults write com.apple.mail SpellCheckingBehavior -string "NoSpellCheckingEnabled"
@@ -637,6 +657,8 @@ sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search
 # Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
 # Commented because: Could not write domain /.Spotlight-V100/VolumeConfiguration; exiting
 # sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+
+defaults delete com.apple.Spotlight "NSStatusItem Visible Item-0"
 
 # Change indexing order and disable some search results
 # Yosemite-specific search results (remove them if you are using macOS 10.9 or older):
@@ -751,6 +773,8 @@ open "${PWD}/dotfiles/mac/iterm/Night Owl.itermcolors"
 #defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
 defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool true
+defaults write com.googlecode.iterm2 DisableFullscreenTransparency -bool true
+defaults write com.googlecode.iterm2 AlternateMouseScroll -bool false
 
 ###############################################################################
 # Time Machine                                                                #
@@ -805,6 +829,8 @@ defaults write com.apple.DiskUtility advanced-image-options -bool true
 
 # Auto-play videos when opened with QuickTime Player
 defaults write com.apple.QuickTimePlayerX MGPlayMovieOnOpen -bool true
+
+defaults write com.apple.DiskUtility SidebarShowAllDevices -bool true
 
 ###############################################################################
 # Mac App Store                                                               #
@@ -880,7 +906,7 @@ defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool t
 ############################## JZ ######################
 
 # Date settings
-#defaults write com.apple.menuextra.clock.plist DateFormat -string 'EEE d. M.,  H:mm:ss'
+defaults write com.apple.menuextra.clock.plist DateFormat -string 'EEE d. M.,  H:mm:ss'
 
 # Battery percentage
 defaults write com.apple.menuextra.battery.plist ShowPercent -string 'YES'
@@ -888,29 +914,35 @@ defaults write com.apple.menuextra.battery.plist ShowPercent -string 'YES'
 # Firewall
 sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1
 
-defaults write com.apple.systemuiserver menuExtras -array \
-	"/System/Library/CoreServices/Menu Extras/Clock.menu" \
-	"/System/Library/CoreServices/Menu Extras/Battery.menu" \
-	"/System/Library/CoreServices/Menu Extras/AirPort.menu" \
-	"/System/Library/CoreServices/Menu Extras/Bluetooth.menu" \
-	"/System/Library/CoreServices/Menu Extras/Volume.menu" \
-	"/System/Library/CoreServices/Menu Extras/Displays.menu" \
-	"/System/Library/CoreServices/Menu Extras/VPN.menu"
-defaults write com.apple.systemuiserver "NSStatusItem Preferred Position Siri" -float 61
-defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.clock" -float 180
-defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.vpn" -float "254.76171875"
-defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.battery" -float 316
-defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.volum" -float 369
-defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.airport" -float 399
-defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.bluetooth" -float 463
-defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.airport" -bool true
-defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.battery" -bool true
-defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.bluetooth" -bool true
-defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.clock" -bool true
-defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.volume" -bool true
-defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.vpn" -bool true
-defaults write com.apple.systemuiserver "__NSEnableTSMDocumentWindowLevel" -bool true
-killall SystemUIServer
+defaults write com.apple.Siri StatusMenuVisible -bool false
+
+sudo defaults write com.apple.RemoteManagement -dict \
+	ScreenSharingReqPermEnabled -bool false \
+	VNCLegacyConnectionsEnabled -bool true
+
+#defaults write com.apple.systemuiserver menuExtras -array \
+#	"/System/Library/CoreServices/Menu Extras/Clock.menu" \
+#	"/System/Library/CoreServices/Menu Extras/Battery.menu" \
+#	"/System/Library/CoreServices/Menu Extras/AirPort.menu" \
+#	"/System/Library/CoreServices/Menu Extras/Bluetooth.menu" \
+#	"/System/Library/CoreServices/Menu Extras/Volume.menu" \
+#	"/System/Library/CoreServices/Menu Extras/Displays.menu" \
+#	"/System/Library/CoreServices/Menu Extras/VPN.menu"
+#defaults write com.apple.systemuiserver "NSStatusItem Preferred Position Siri" -float 61
+#defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.clock" -float 180
+#defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.vpn" -float "254.76171875"
+#defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.battery" -float 316
+#defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.volum" -float 369
+#defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.airport" -float 399
+#defaults write com.apple.systemuiserver "NSStatusItem Preferred Position com.apple.menuextra.bluetooth" -float 463
+#defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.airport" -bool true
+#defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.battery" -bool true
+#defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.bluetooth" -bool true
+#defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.clock" -bool true
+#defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.volume" -bool true
+#defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.vpn" -bool true
+#defaults write com.apple.systemuiserver "__NSEnableTSMDocumentWindowLevel" -bool true
+#killall SystemUIServer
 
 # Show VPN connection duration
 defaults write com.apple.networkConnect VPNShowTime -bool true
@@ -920,7 +952,7 @@ defaults write com.apple.networkConnect VPNShowTime -bool true
 #defaults write com.apple.dock largesize -float 44
 #defaults write com.apple.dock magnification -bool false
 #defaults write com.apple.dock mod-count -int 24
-#defaults write com.apple.dock showAppExposeGestureEnabled -bool true
+defaults write com.apple.dock showAppExposeGestureEnabled -bool true
 
 ###############################################################################
 # Kill affected applications                                                  #
@@ -946,3 +978,8 @@ for app in "Activity Monitor" \
 	sudo killall -9 "${app}" &> /dev/null
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
+
+echo "Manual settings needed: "
+echo "iTerm2:"
+echo "  * Unlimited scrollback"
+echo "  * Non-ASCII font"

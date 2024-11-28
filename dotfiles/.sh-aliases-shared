@@ -37,7 +37,7 @@ fi
 # 	==- rm -==
 # alias rm='rm -i'
 # alias rm='mv \!* ~/.trash'
-alias rm='rmtrash'
+alias rm='trash'
 
 
 # 	==- grep -==

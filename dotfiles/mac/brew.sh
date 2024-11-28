@@ -4,7 +4,7 @@
 #   @author     Jozef Zuzelka <jozef.zuzelka@gmail.com>
 #   @date
 #    - Created: 10.04.2020 16:14
-#    - Edited:  10.04.2020 16:36
+#    - Edited:  16.12.2021 16:37
 #   @version    1.0.0
 #   @par        SHELL: zsh 5.7.1 (x86_64-apple-darwin19.0)
 #   @bug
@@ -13,6 +13,8 @@
 ## Install Homebrew (if not installed)
 echo "Installing Homebrew."
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+PATH="${PATH}:/opt/homebrew/bin"
 
 ## Make sure we’re using the latest Homebrew.
 brew update
